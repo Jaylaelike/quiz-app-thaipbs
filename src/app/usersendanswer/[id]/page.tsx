@@ -7,6 +7,8 @@ import { FormInputAnswer } from "../../types";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import UserSendForm from "@/app/components/UserSendForm";
+import { useQuery } from "@tanstack/react-query";
 
 interface QuestionIdProps {
   params: {
@@ -14,7 +16,7 @@ interface QuestionIdProps {
   };
 }
 
-function CreateAnswerPage({ params }: QuestionIdProps) {
+function UserCreateAnswerPage({ params }: QuestionIdProps) {
   const handleCreateAnswer: SubmitHandler<FormInputAnswer> = async (data) => {
     createAnswer(data);
   };
@@ -34,17 +36,34 @@ function CreateAnswerPage({ params }: QuestionIdProps) {
       router.refresh();
     },
   });
+
+
+  //fetch content question 
+  const { data: question, isLoading: isLoadingQuestion } = useQuery({
+    queryKey: ["question", params.id],
+    queryFn: async () => {
+      const res = await axios.get(`/api/questions/${params.id}`);
+      return res.data;
+    },
+  });
+
+  console.log(question?.content);
+
+
+
   return (
     <div>
       <BackButton />
-      <h1 className="text-2xl my-4 font-bold text-center">เพิ่มคำตอบ</h1>
-      <AnswerFormPost
-        submit={handleCreateAnswer}
-        isEditing={false}
-        questionId={params.id}
+      <h1 className="text-2xl my-4 font-bold text-center"> 
+      คำถาม:  {question?.content}  ?
+       </h1>
+      <UserSendForm
+        // submit={handleCreateAnswer}
+        // isEditing={false}
+        questionId= {params.id}
       />
     </div>
   );
 }
 
-export default CreateAnswerPage;
+export default UserCreateAnswerPage;

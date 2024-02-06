@@ -32,7 +32,7 @@ function NavBar() {
           </div>
         ) : null}
 
-<RewardNavbar id={user?.id || ""} />
+        <RewardNavbar id={user?.id || ""} />
       </div>
 
       <div className="dropdown dropdown-end">
@@ -63,7 +63,9 @@ function NavBar() {
             </Link>
           </li>
           <li>
-            <a>Settings</a>
+            <Link href={"/rank"} className="justify-between">
+              อันดับ
+            </Link>
           </li>
           <li>
             <SignOutButton />

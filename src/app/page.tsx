@@ -34,6 +34,7 @@ async function newUser() {
       id: userId || "",
       username: user?.firstName || user?.username || "",
       email: user?.emailAddresses[0].emailAddress || "",
+      imageUrl: user?.imageUrl || "",
     },
   });
   //create a new user Reward initally set to 0

@@ -32,6 +32,7 @@ model User {
   id        String     @id @default(cuid())
   username  String     @unique
   email     String     @unique
+  imageUrl  String?
   Questions Question[]
   Rewards   Reward[]
   Answers   Answer[]

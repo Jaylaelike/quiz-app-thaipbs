@@ -10,6 +10,7 @@ export default authMiddleware({
     "/api/users/create",
     "/api/questions/create",
     "/api/answers/create",
+    "/api/rewards",
   ],
 });
 
