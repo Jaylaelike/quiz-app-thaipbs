@@ -13,10 +13,14 @@ interface ButtonActionProps {
 
 
 function ButtonAction({ id }: ButtonActionProps) {
+  // console.log(id);
+  
+
+  //delect qustion by id
   const router = useRouter();
   const { mutate: deletePost, isPending: isLoading } = useMutation({
     mutationFn: async () => {
-      return axios.delete(`/api/posts/${id}`);
+      return axios.delete(`/api/questions/${id}`);
     },
     onSuccess: () => {
       router.push("/");

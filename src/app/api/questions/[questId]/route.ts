@@ -11,7 +11,7 @@ export async function DELETE(req: Request, context: contextProps) {
   try {
     const { params } = context;
 
-    await db.post.delete({
+    await db.question.delete({
       where: {
         id: params.questId,
       },

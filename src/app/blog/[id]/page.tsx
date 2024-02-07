@@ -6,7 +6,6 @@ import dayjs from "dayjs";
 import { auth, currentUser } from "@clerk/nextjs";
 import ButtonUserAction from "@/app/components/ButtonUserAction";
 
-
 interface BlogDetailPageProps {
   params: {
     id: string;
@@ -29,15 +28,28 @@ async function getPost(id: string) {
   return res;
 }
 
-async function getAnswers(id: string) {
+//filter answer by userId and questionId
+async function getAnswers(questionId: string, userId: string) {
   const res = await db.answer.findMany({
     where: {
-      questionId: id,
+      questionId: questionId,
+      userId: userId,
     },
     select: {
       content: true,
       isCorrect: true,
       createdAt: true,
+    },
+  });
+  return res;
+}
+
+//get answers in questionId from userId is have answer or not
+async function getAnswerByUserId(userId: string, questionId: string) {
+  const res = await db.answer.findFirst({
+    where: {
+      userId: userId,
+      questionId: questionId,
     },
   });
   return res;
@@ -49,7 +61,11 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
   const user = await currentUser();
 
   const post = await getPost(params.id);
-  const answers = await getAnswers(params.id);
+  const answers = await getAnswers(params.id, userId);
+
+  //check answer have or not  by userId
+  const answerByUserId = await getAnswerByUserId(userId, params.id);
+ // console.log(answerByUserId);
 
   return (
     <div>
@@ -81,21 +97,29 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
             </table>
             <ButtonAction id={params.id} />
           </>
-        ) : (
+        ) : !answerByUserId &&
+          user?.emailAddresses[0].emailAddress !== "smarkwisai@gmail.com" ? (
           <>
             <div className="flex flex-col items-center justify-center w-full space-y-6">
               <h2 className="text-2xl font-bold my-4">{post?.content}</h2>
               <p>โดย: {post?.user?.username}</p>
               <p>ตอบคำถามถูกรับ 10 คะแนน</p>
               <p>ตอบคำถามผิดได้ 5 คะแนน</p>
-             <ButtonUserAction id={params.id} />
+              <ButtonUserAction id={params.id} />
             </div>
+          </>
+        ) : (
+          <>
+            <h1>คุณไม่สามารถตอบคำถามนี้ได้ เนื่องจากคุณได้ตอบไปแล้ว !!!</h1>
           </>
         )}
       </div>
+
       <span className="badge badge-accent">{post?.status}</span>
     </div>
   );
 };
 
 export default BlogDetailPage;
+
+

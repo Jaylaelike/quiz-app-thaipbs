@@ -14,13 +14,14 @@ function RewardNavbar({ id }: UserIdProps) {
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
     queryFn: async () => {
-        const res = await axios.get(`/api/users/${id}`);
-       // console.log(res.data?.Rewards[0].points);
-        
-        return res.data;
+      const res = await axios.get(`/api/users/${id}`);
+      console.log(res.data?.Rewards[0].points);
 
+      return res.data;
     },
   });
+
+ 
 
   return (
     <div>
@@ -31,10 +32,7 @@ function RewardNavbar({ id }: UserIdProps) {
           </div>
 
           <div className="flex-1 ">
-            <h4 className="text-base "> 
-            {data?.Rewards[0].points}
-            
-            </h4>
+            <h4 className="text-base ">{data?.Rewards[0].points}</h4>
           </div>
 
           <div className="flex-1">

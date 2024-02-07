@@ -40,6 +40,10 @@ const PostCard: FC<PostCardProps> = ({ post }) => {
 
   return (
     <>
+
+    {!user ? (  <div className="skeleton h-32 w-full"></div>) : 
+
+   (<>
       {user?.emailAddresses[0].emailAddress === "smarkwisai@gmail.com" ? (
         <div className="card w-full bg-base-100 shadow-xl border">
           <div className="card-body">
@@ -75,12 +79,17 @@ const PostCard: FC<PostCardProps> = ({ post }) => {
                   </Link>
                 </div>
               </div>
+
+            
             </div>
           ) : null}
         </>
       )}
     </>
+    )}
+    </>
   );
-};
+}
+
 
 export default PostCard;

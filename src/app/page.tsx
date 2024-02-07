@@ -1,3 +1,4 @@
+
 import PostCard from "./components/PostCard";
 import db from "./lib/db";
 
@@ -21,6 +22,7 @@ async function getPosts() {
       createdAt: "desc",
     },
   });
+  
   return res;
 }
 
@@ -45,12 +47,12 @@ async function newUser() {
     },
   });
   return res;
-
-  
 }
 
 // eslint-disable-next-line @next/next/no-async-client-component
 export default async function Home() {
+
+
   const post = await getPosts();
   //check if user is not exist in database then create new user
   if (auth().userId) {
@@ -64,11 +66,10 @@ export default async function Home() {
     }
   }
 
-
   return (
     <main className="grid items-center justify-center md:grid-cols-2 lg:grid-cols-3 gap-4 mt-10">
       {post.map((post) => (
-        <PostCard key={post.id} post={post} />
+        <PostCard key={post.id} post={post}  />
       ))}
     </main>
   );
