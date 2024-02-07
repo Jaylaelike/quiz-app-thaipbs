@@ -55,6 +55,22 @@ async function getAnswerByUserId(userId: string, questionId: string) {
   return res;
 }
 
+//get all answers in questionId
+async function getAnswerAlluser(questionId: string) {
+  const res = await db.answer.findMany({
+    where: {
+      questionId: questionId,
+    },
+  });
+  return res;
+}
+
+//get user all
+async function getUserAll() {
+  const res = await db.user.findMany();
+  return res;
+}
+
 // eslint-disable-next-line @next/next/no-async-client-component
 const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
   const { userId } = auth();
@@ -65,7 +81,13 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
 
   //check answer have or not  by userId
   const answerByUserId = await getAnswerByUserId(userId, params.id);
- // console.log(answerByUserId);
+  // console.log(answerByUserId);
+
+  const answerAlluser = await getAnswerAlluser(params.id);
+  // console.log(answerAlluser);
+
+  const userAll = await getUserAll();
+  // console.log(userAll);
 
   return (
     <div>
@@ -73,7 +95,7 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
       <div className="mb-8">
         {user?.emailAddresses[0].emailAddress === "smarkwisai@gmail.com" ? (
           <>
-            <h3>คำตอบ</h3>
+            <h3>ผลเฉลยคำตอบ</h3>
 
             <table className="table">
               {/* head */}
@@ -95,6 +117,37 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
                 ))}
               </tbody>
             </table>
+
+            <h3>คำตอบจากผู้ท้าชิง</h3>
+
+            <table className="table">
+              {/* head */}
+              <thead>
+                <tr>
+                  <th>ผู้ตอบ</th>
+                  <th>คำตอบ</th>
+                  <th>เฉลย</th>
+                  <th>อัพเดท</th>
+                </tr>
+              </thead>
+              {/* body */}
+              <tbody>
+                {answerAlluser.map((answer) => (
+                  <tr key={answer.id}>
+                    <td>
+                      {userAll.map((user) =>
+                        user.id === answer.userId ? user.username : null
+                      )}
+                    </td>
+
+                    <td>{answer.content}</td>
+                    {answer.isCorrect ? <td>ถูก ✅</td> : <td>ผิด ❌</td>}
+                    <td>{dayjs(answer.createdAt).format("DD/MM/YYYY")}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
             <ButtonAction id={params.id} />
           </>
         ) : !answerByUserId &&
@@ -121,5 +174,3 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
 };
 
 export default BlogDetailPage;
-
-
