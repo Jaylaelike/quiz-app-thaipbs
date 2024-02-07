@@ -12,8 +12,10 @@ export default authMiddleware({
     "/api/answers/create",
     "/api/rewards",
     "/api/questions/",
-
   ],
+
+  
+  
 });
 
 export const config = {
