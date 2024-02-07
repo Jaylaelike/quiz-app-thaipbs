@@ -13,7 +13,7 @@ function page() {
   const { data } = useQuery({
     queryKey: ["rewards"],
     queryFn: async () => {
-      const res = await axios.get(`/api/rewards`);
+      const res = await axios.get("/api/rewards");
       // console.log(res.data);
 
       return res.data;
