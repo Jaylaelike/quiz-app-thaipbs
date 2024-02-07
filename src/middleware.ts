@@ -9,9 +9,10 @@ export default authMiddleware({
   publicRoutes: [
     "/api/users/create",
     "/api/questions/create",
-    "/api/questions/",
     "/api/answers/create",
     "/api/rewards",
+    "/api/questions/",
+
   ],
 });
 

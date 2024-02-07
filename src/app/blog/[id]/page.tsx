@@ -60,12 +60,15 @@ async function getAnswerAlluser(questionId: string) {
   const res = await db.answer.findMany({
     where: {
       questionId: questionId,
+      NOT: {
+        userId: "user_2Y4Ookbfem91BKQT1RNiSdWA3Gc",
+      },
     },
   });
   return res;
 }
 
-//get user all
+//get user all filter not "Sittichai"
 async function getUserAll() {
   const res = await db.user.findMany();
   return res;

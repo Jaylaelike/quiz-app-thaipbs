@@ -15,6 +15,9 @@ export async function DELETE(req: Request, context: contextProps) {
       where: {
         id: params.questId,
       },
+      include: {
+        Answers: true,
+      },
     });
 
     return new Response(null, { status: 204 });

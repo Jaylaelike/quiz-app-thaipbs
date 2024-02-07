@@ -46,7 +46,7 @@ const FormPost: FC<FormPostProps> = ({ submit, isEditing, initalValue }) => {
     
       <input
         {...register("userId", { required: true })}
-        type="text"
+        type="hidden"
         placeholder="Post Title ..."
         className="input input-bordered w-full max-w-lg"
         value={userId || ""}

@@ -4,36 +4,37 @@ import axios from "axios";
 import { PenSquare, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle } from "lucide-react";
 
 interface ButtonActionProps {
   id: string;
 }
 
-
-
 function ButtonAction({ id }: ButtonActionProps) {
   // console.log(id);
-  
 
   //delect qustion by id
   const router = useRouter();
   const { mutate: deletePost, isPending: isLoading } = useMutation({
     mutationFn: async () => {
-      return axios.delete(`/api/questions/${id}`);
+      const res = await axios.delete(`/api/questions/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "DELETE",
+      });
+      return res.data;
     },
     onSuccess: () => {
       router.push("/");
       router.refresh();
     },
     onError: (error) => {
+      console.log(error.stack);
+
       console.log("error");
     },
   });
-
-
-
-
 
   return (
     <div>

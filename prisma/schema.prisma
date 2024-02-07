@@ -44,7 +44,7 @@ model Question {
   userId    String
   status    String  @default("draft")
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   Answers   Answer[]
 }
 
@@ -60,8 +60,8 @@ model Answer {
   content    String
   isCorrect  Boolean
   questionId String
-  question   Question @relation(fields: [questionId], references: [id])
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
   userId     String
   createdAt  DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
