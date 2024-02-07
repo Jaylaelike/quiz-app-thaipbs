@@ -7,20 +7,20 @@ import { useUser } from "@clerk/nextjs";
 function page() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { isSignedIn, user } = useUser();
-  console.log(user?.imageUrl);
+  // console.log(user?.imageUrl);
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data } = useQuery({
     queryKey: ["rewards"],
     queryFn: async () => {
       const res = await axios.get(`/api/rewards`);
-      console.log(res.data);
+      // console.log(res.data);
 
       return res.data;
     },
   });
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <>

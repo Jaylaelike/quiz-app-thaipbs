@@ -10,9 +10,12 @@ interface UserIdProps {
 function RewardNavbar({ id }: UserIdProps) {
   const { data } = useQuery({
     queryKey: ["rewards", id],
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
     queryFn: async () => {
         const res = await axios.get(`/api/users/${id}`);
-        console.log(res.data?.Rewards[0].points);
+       // console.log(res.data?.Rewards[0].points);
         
         return res.data;
 

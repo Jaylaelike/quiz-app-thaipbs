@@ -2,6 +2,8 @@
 import React from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 function page() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -12,6 +14,22 @@ function page() {
   if (!isLoaded || !userId) {
     return <div>Loading...</div>;
   }
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { data } = useQuery({
+    queryKey: ["rewards", userId],
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+    queryFn: async () => {
+      const res = await axios.get(`/api/users/${userId}`);
+      // console.log(res.data?.Rewards[0].points);
+
+      return res.data;
+    },
+  });
+
+  // console.log(data?.Rewards[0].points);
 
   return (
     <>
@@ -37,43 +55,38 @@ function page() {
 
             <p>รหัสผู้ใช้: {userId}</p>
 
-            <p>รหัสเซสชั่น: {sessionId}</p>
+            {/* <p>รหัสเซสชั่น: {sessionId}</p> */}
 
-            <p>ดาว: </p>
-            <div className="rating">
-              <input
-                type="radio"
-                name="rating-2"
-                className="mask mask-star-2 bg-orange-400"
-              />
-              <input
-                type="radio"
-                name="rating-2"
-                className="mask mask-star-2 bg-orange-400"
-                checked
-              />
-              <input
-                type="radio"
-                name="rating-2"
-                className="mask mask-star-2 bg-orange-400"
-              />
-              <input
-                type="radio"
-                name="rating-2"
-                className="mask mask-star-2 bg-orange-400"
-              />
-              <input
-                type="radio"
-                name="rating-2"
-                className="mask mask-star-2 bg-orange-400"
-              />
-            </div>
-
-            <div className="form-control">
-              <div className="card-actions justify-center p-3">
-                <button className="btn btn-primary">Submit</button>
+            <div className="flex flex-rows space-x-4">
+              <p>คะแนน: {data?.Rewards[0].points}</p>
+              <div className="rating">
+                <input
+                  type="radio"
+                  name="rating-2"
+                  className="mask mask-star-2 bg-orange-400"
+                />
               </div>
             </div>
+
+            <p>Badge</p>
+            {data?.Rewards[0].points ? (
+              data?.Rewards[0].points > 50 ? (
+                <img
+                  src="https://res.cloudinary.com/satjay/image/upload/v1707274298/wijtms2qtn1mlhmllz25.png"
+                  className="w-30 rounded-full"
+                />
+              ) : data?.Rewards[0].points > 20 ? (
+                <img
+                  src="https://res.cloudinary.com/satjay/image/upload/v1707274298/wnpivrdy57uvug6gon4z.png"
+                  className="w-30 rounded-full"
+                />
+              ) : (
+                <img
+                  src="https://res.cloudinary.com/satjay/image/upload/v1707274297/hzis1ilev5vehxifuoxy.png"
+                  className="w-30 rounded-full"
+                />
+              )
+            ) : null}
           </div>
         </div>
       </div>

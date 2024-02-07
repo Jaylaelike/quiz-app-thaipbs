@@ -10,3 +10,8 @@ export type FormInputAnswer = {
   questionId: string;
   userId: string;
 };
+
+export type FormInputReward = {
+  points: number;
+  userId: string;
+};
