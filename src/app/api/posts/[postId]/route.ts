@@ -1,11 +1,11 @@
-import { db } from "../../../lib/db";
-import { NextResponse } from "next/server";
+// import { db } from "../../../lib/db";
+// import { NextResponse } from "next/server";
 
-interface contextProps {
-  params: {
-    postId: string;
-  };
-}
+// interface contextProps {
+//   params: {
+//     postId: string;
+//   };
+// }
 
 // export async function DELETE(req: Request, context: contextProps) {
 //   try {
