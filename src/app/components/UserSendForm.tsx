@@ -134,6 +134,24 @@ const UserSendForm: FC<FormAnswerProps> = ({
     }
   }
 
+  //create useEffect for play audio on submit form url
+  React.useEffect(() => {
+    if (onsubmit === true) {
+      if (isCorrect === true) {
+        const audio = new Audio(
+          "https://smongmtkwekplybenfjr.supabase.co/storage/v1/object/public/audio/True_answer.mp3"
+        );
+        audio.play();
+      }
+      if (isCorrect === false) {
+        const audio = new Audio(
+          "https://smongmtkwekplybenfjr.supabase.co/storage/v1/object/public/audio/Fail_answer.mp3"
+        );
+        audio.play();
+      }
+    }
+  }, [onsubmit]);
+
   return (
     <>
       {onsubmit === true && isCorrect === true && (

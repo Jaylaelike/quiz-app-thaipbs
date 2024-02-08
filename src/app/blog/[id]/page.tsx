@@ -166,7 +166,15 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
           </>
         ) : (
           <>
-            <h1>คุณไม่สามารถตอบคำถามนี้ได้ เนื่องจากคุณได้ตอบไปแล้ว !!!</h1>
+            <div className="flex flex-col items-center justify-center w-full space-y-6">
+              <h1>คุณไม่สามารถตอบคำถามนี้ได้ เนื่องจากคุณได้ตอบไปแล้ว !!!</h1>
+              <img
+                src="https://res.cloudinary.com/satjay/image/upload/v1707374169/vojq1d1bzrnk0fhgexgz.png"
+                alt="oops_react"
+                height={200}
+                width={200}
+              />
+            </div>
           </>
         )}
       </div>
