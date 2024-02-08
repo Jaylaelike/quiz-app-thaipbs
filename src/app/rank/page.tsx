@@ -1,4 +1,4 @@
-
+"use client";
 import Ranking from "../components/Ranking";
 
 function page() {

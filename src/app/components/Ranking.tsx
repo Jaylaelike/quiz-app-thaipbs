@@ -2,7 +2,6 @@
 // import db from "../lib/db";
 import React from "react";
 
-
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -22,8 +21,6 @@ import axios from "axios";
 // }
 
 function Ranking() {
-
-
   const { data, isLoading } = useQuery({
     queryKey: ["user"],
     refetchInterval: 5000,
