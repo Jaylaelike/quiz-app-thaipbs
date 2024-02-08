@@ -1,46 +1,55 @@
-"use client";
-// import db from "../lib/db";
+
+import db from "../../lib/db";
 import React from "react";
 
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 
-// async function getRewards() {
-//   const res = await db.reward.findMany({
-//       include: {
-//           user: true,
-//         },
-//     orderBy: {
-//       points: "desc",
-//     },
-//   });
 
-//   console.log(res);
-
-//   return res;
-// }
-
-function page() {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { data, isLoading } = useQuery({
-    queryKey: ["points"],
-    refetchInterval: 5000,
-    refetchOnWindowFocus: true,
-    retryOnMount: true,
-    refetchOnReconnect: true,
-    queryFn: async () => {
-      const res = await axios.get("/api/rewards");
-      // console.log(res);
-
-      return res;
+async function getRewards() {
+  const res = await db.reward.findMany({
+      include: {
+          user: true,
+        },
+    orderBy: {
+      points: "desc",
     },
   });
 
-  console.log(data?.data);
+  console.log(res);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  return res;
+}
+
+async function page() {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+//   const { data, isLoading } = useQuery({
+//     queryKey: ["points"],
+//     refetchInterval: 5000,
+//     refetchOnWindowFocus: true,
+//     retryOnMount: true,
+//     refetchOnReconnect: true,
+//     queryFn: async () => {
+//       const res = await db.reward.findMany({
+//         include: {
+//           user: true,
+//         },
+//         orderBy: {
+//           points: "desc",
+//         },
+//       });
+//       // console.log(res);
+
+//       return res;
+//     },
+//   });
+
+    const data =  await getRewards();
+
+
+//   console.log(data);
+
+//   if (isLoading) {
+//     return <div>Loading...</div>;
+//   }
 
   return (
     <>
@@ -105,9 +114,9 @@ function page() {
                       </tr>
                     </thead>
                     <tbody>
-                      {data?.data.map((reward: any) => (
+                      {data.map((reward: any) => (
                         <tr key={reward.id}>
-                          <td>{data?.data.indexOf(reward) + 1}</td>
+                          <td>{data.indexOf(reward) + 1}</td>
                           <td>
                             <div className="avatar">
                               <div className="w-10 rounded-full">
