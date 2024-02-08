@@ -12,9 +12,7 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
-  api: {
-    externalResolver: true,
-  },
+ 
 };
 
 module.exports = nextConfig;

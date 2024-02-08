@@ -63,7 +63,7 @@ function NavBar() {
             </Link>
           </li>
           <li>
-            <Link href={"/rank"} className="justify-between">
+            <Link href={"/scores"} className="justify-between">
               อันดับ
             </Link>
           </li>

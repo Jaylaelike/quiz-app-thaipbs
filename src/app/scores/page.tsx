@@ -1,12 +1,11 @@
-"use client";
+import React from "react";
 import Ranking from "../components/Ranking";
 
 function page() {
-
   return (
-    <>
+    <div>
       <Ranking />
-    </>
+    </div>
   );
 }
 
