@@ -22,7 +22,7 @@ import axios from "axios";
 
 function Ranking() {
   const { data, isLoading } = useQuery({
-    queryKey: ["user"],
+    queryKey: ["points"],
     refetchInterval: 5000,
     refetchOnWindowFocus: true,
     retryOnMount: true,
