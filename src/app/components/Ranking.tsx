@@ -1,29 +1,48 @@
-import db from "../lib/db";
+"use client";
+// import db from "../lib/db";
 import React from "react";
 
 
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
-async function getRewards() {
-    const res = await db.reward.findMany({
-        include: {
-            user: true,
-          },
-      orderBy: {
-        points: "desc",
-      },
-    });
-    
-    console.log(res);
-    
-    return res;
+// async function getRewards() {
+//   const res = await db.reward.findMany({
+//       include: {
+//           user: true,
+//         },
+//     orderBy: {
+//       points: "desc",
+//     },
+//   });
+
+//   console.log(res);
+
+//   return res;
+// }
+
+function Ranking() {
+
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["user"],
+    refetchInterval: 5000,
+    refetchOnWindowFocus: true,
+    retryOnMount: true,
+    refetchOnReconnect: true,
+    queryFn: async () => {
+      const res = await axios.get("/api/rewards");
+      // console.log(res);
+
+      return res;
+    },
+  });
+
+  console.log(data?.data);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
-
-
-  
-async function Ranking() {
-const data = await getRewards();
- 
-
 
   return (
     <>
@@ -88,9 +107,9 @@ const data = await getRewards();
                       </tr>
                     </thead>
                     <tbody>
-                      {data?.map((reward: any) => (
+                      {data?.data.map((reward: any) => (
                         <tr key={reward.id}>
-                          <td>{data.indexOf(reward) + 1}</td>
+                          <td>{data?.data.indexOf(reward) + 1}</td>
                           <td>
                             <div className="avatar">
                               <div className="w-10 rounded-full">
@@ -127,16 +146,13 @@ const data = await getRewards();
                         </tr>
                       ))}
                     </tbody>
-               
                   </table>
-
                 </div>
               </div>
             </div>
           </div>
         </div>
-        </div>
-     
+      </div>
     </>
   );
 }

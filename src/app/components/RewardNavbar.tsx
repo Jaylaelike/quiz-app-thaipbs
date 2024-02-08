@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Trophy } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -13,6 +14,7 @@ function RewardNavbar({ id }: UserIdProps) {
     refetchOnMount: true,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
+    refetchInterval: 5000,
     queryFn: async () => {
       const res = await axios.get(`/api/users/${id}`);
       console.log(res.data?.Rewards[0].points);

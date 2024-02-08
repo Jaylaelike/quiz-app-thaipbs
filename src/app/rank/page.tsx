@@ -1,3 +1,4 @@
+
 import Ranking from "../components/Ranking";
 
 function page() {
