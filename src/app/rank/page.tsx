@@ -1,8 +1,9 @@
 "use client";
-import React from "react";
+
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
+
 
 function page() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -20,7 +21,10 @@ function page() {
     },
   });
 
-  // console.log(data);
+
+
+
+  console.log(data);
 
   return (
     <>
@@ -137,4 +141,8 @@ function page() {
 
 export default page;
 
+
+function useState(arg0: never[]): [any, any] {
+  throw new Error("Function not implemented.");
+}
 // https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"

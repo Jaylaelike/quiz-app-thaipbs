@@ -12,6 +12,9 @@ const nextConfig = {
         // !! WARN !!
         ignoreBuildErrors: true,
       },
+      api: {
+        externalResolver: true,
+      },
 
 }
 
