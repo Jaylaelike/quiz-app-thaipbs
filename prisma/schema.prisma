@@ -56,7 +56,7 @@ model Reward {
   id     String @id @default(cuid())
   points Int
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Answer {

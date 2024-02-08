@@ -1,4 +1,5 @@
 import Advertistment from "./components/Advertistment";
+import GreetingCard from "./components/GreetingCard";
 import PostCard from "./components/PostCard";
 import db from "./lib/db";
 
@@ -42,7 +43,7 @@ async function newUser() {
   //create a new user Reward initally set to 0
   await db.reward.create({
     data: {
-      points: 0,
+      points: 50,
       userId: res.id,
     },
   });
@@ -51,6 +52,8 @@ async function newUser() {
 
 // eslint-disable-next-line @next/next/no-async-client-component
 export default async function Home() {
+  const users = await currentUser();
+
   const post = await getPosts();
   //check if user is not exist in database then create new user
   if (auth().userId) {
@@ -62,18 +65,24 @@ export default async function Home() {
     if (!user) {
       await newUser();
     }
-  }
 
-  return (
-    <>
-      <div className="grid grid-rows-1 w-full  text-white text-center py-1">
-        <Advertistment />
-      </div>
-      <main className="grid items-center justify-center md:grid-cols-2 lg:grid-cols-3 gap-4 mt-10">
-        {post.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
-      </main>
-    </>
-  );
+    return (
+      <>
+        <div className="grid grid-rows-1 w-full  text-white text-center py-1">
+          <Advertistment />
+        </div>
+        <main className="grid items-center justify-center md:grid-cols-2 lg:grid-cols-3 gap-4 mt-10">
+          {post.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </main>
+        <div className="flex items-center justify-center h-screen">
+          <GreetingCard
+            username={users?.firstName || users?.username || null}
+            fisrtLogin={user ? false : true}
+          />
+        </div>
+      </>
+    );
+  }
 }
