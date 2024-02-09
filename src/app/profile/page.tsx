@@ -70,12 +70,12 @@ function page() {
 
             <p>Badge</p>
             {data?.Rewards[0].points ? (
-              data?.Rewards[0].points > 50 ? (
+              data?.Rewards[0].points >= 1000 ? (
                 <img
                   src="https://res.cloudinary.com/satjay/image/upload/v1707274298/wijtms2qtn1mlhmllz25.png"
                   className="w-30 rounded-full"
                 />
-              ) : data?.Rewards[0].points > 20 ? (
+              ) : data?.Rewards[0].points >= 500 ? (
                 <img
                   src="https://res.cloudinary.com/satjay/image/upload/v1707274298/wnpivrdy57uvug6gon4z.png"
                   className="w-30 rounded-full"

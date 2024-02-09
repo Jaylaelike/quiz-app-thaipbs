@@ -1,14 +1,11 @@
-
 import db from "../../lib/db";
 import React from "react";
 
-
-
 async function getRewards() {
   const res = await db.reward.findMany({
-      include: {
-          user: true,
-        },
+    include: {
+      user: true,
+    },
     orderBy: {
       points: "desc",
     },
@@ -21,35 +18,34 @@ async function getRewards() {
 
 async function page() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-//   const { data, isLoading } = useQuery({
-//     queryKey: ["points"],
-//     refetchInterval: 5000,
-//     refetchOnWindowFocus: true,
-//     retryOnMount: true,
-//     refetchOnReconnect: true,
-//     queryFn: async () => {
-//       const res = await db.reward.findMany({
-//         include: {
-//           user: true,
-//         },
-//         orderBy: {
-//           points: "desc",
-//         },
-//       });
-//       // console.log(res);
+  //   const { data, isLoading } = useQuery({
+  //     queryKey: ["points"],
+  //     refetchInterval: 5000,
+  //     refetchOnWindowFocus: true,
+  //     retryOnMount: true,
+  //     refetchOnReconnect: true,
+  //     queryFn: async () => {
+  //       const res = await db.reward.findMany({
+  //         include: {
+  //           user: true,
+  //         },
+  //         orderBy: {
+  //           points: "desc",
+  //         },
+  //       });
+  //       // console.log(res);
 
-//       return res;
-//     },
-//   });
+  //       return res;
+  //     },
+  //   });
 
-    const data =  await getRewards();
+  const data = await getRewards();
 
+  //   console.log(data);
 
-//   console.log(data);
-
-//   if (isLoading) {
-//     return <div>Loading...</div>;
-//   }
+  //   if (isLoading) {
+  //     return <div>Loading...</div>;
+  //   }
 
   return (
     <>
@@ -133,12 +129,12 @@ async function page() {
                           <td>{reward.points}</td>
 
                           <td>
-                            {reward.points > 50 ? (
+                            {reward.points >= 1000 ? (
                               <img
                                 src="https://res.cloudinary.com/satjay/image/upload/v1707128212/hhgy5vr8jaojbgghp4sr.png"
                                 className="w-10 rounded-full"
                               />
-                            ) : reward.points > 20 ? (
+                            ) : reward.points >= 500 ? (
                               <img
                                 src="https://res.cloudinary.com/satjay/image/upload/v1707128213/lusfl4n4ne79bfapmb8w.png"
                                 className="w-10 rounded-full"
