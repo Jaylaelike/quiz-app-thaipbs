@@ -28,7 +28,7 @@ function Advertistment() {
             }`}
           >
             <img
-              src="https://res.cloudinary.com/satjay/image/upload/v1707463991/ostxspdeakcsbmuzusrl.png"
+              src="https://res.cloudinary.com/satjay/image/upload/v1707470995/jwnoyl61jzqlchzyston.png"
               className="w-full"
             />
           </div>
@@ -39,7 +39,7 @@ function Advertistment() {
             }`}
           >
             <img
-              src="https://res.cloudinary.com/satjay/image/upload/c_fill,g_auto,h_250,w_970/b_rgb:000000,e_gradient_fade,y_-0.50/c_scale,co_rgb:ffffff,fl_relative,l_text:montserrat_25_style_light_align_center:Shop%20Now,w_0.5,y_0.18/v1707388870/wpajf424bbjlqwh0yqfg.png"
+              src="https://res.cloudinary.com/satjay/image/upload/v1707463991/ostxspdeakcsbmuzusrl.png"
               className="w-full"
             />
           </div>
