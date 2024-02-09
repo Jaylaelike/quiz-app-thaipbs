@@ -2,11 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-.slide-right {
-    transition: transform 0.5s ease-in-out;
-    transform: translateX(100%);
-  }
-  
-  .slide-right.show {
-    transform: translateX(0);
-  }
