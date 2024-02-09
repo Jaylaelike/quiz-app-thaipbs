@@ -116,7 +116,7 @@ const UserSendForm: FC<FormAnswerProps> = ({
 
   //filter answer by userId and questionId
   const answerIdbyUserId = dataAnswers?.Answers.filter(
-    (answer) => answer.userId === "user_2Y4Ookbfem91BKQT1RNiSdWA3Gc"
+    (answer) => answer.userId === "user_2Y4Ookbfem91BKQT1RNiSdWA3Gc" && "user_2c7o0iubxsGtok6I7IyJNPqMqrq"
   );
 
   // console.log(answerIdbyUserId);

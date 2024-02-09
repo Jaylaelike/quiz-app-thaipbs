@@ -24,7 +24,7 @@ function NavBar() {
             ยินดีต้อนรับคุณ: {user?.fullName || user?.username}
           </h4>
         </div>
-        {user?.emailAddresses[0].emailAddress === "smarkwisai@gmail.com" ? (
+        {user?.emailAddresses[0].emailAddress === "smarkwisai@gmail.com" && "whea_k@hotmail.com"? (
           <div className="flex-none">
             <Link href="/create" className="btn btn-ghost">
               สร้างคำถาม

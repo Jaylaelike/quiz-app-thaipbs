@@ -44,7 +44,7 @@ const PostCard: FC<PostCardProps> = ({ post }) => {
     {!user ? (  <div className="skeleton h-32 w-full"></div>) : 
 
    (<>
-      {user?.emailAddresses[0].emailAddress === "smarkwisai@gmail.com" ? (
+      {user?.emailAddresses[0].emailAddress === "smarkwisai@gmail.com" || "whea_k@hotmail.com" ? (
         <div className="card w-full bg-base-100 shadow-xl border">
           <div className="card-body">
             <h2 className="card-title">

@@ -62,6 +62,8 @@ async function getAnswerAlluser(questionId: string) {
       questionId: questionId,
       NOT: {
         userId: "user_2Y4Ookbfem91BKQT1RNiSdWA3Gc",
+      } || {
+        userId: "user_2c7o0iubxsGtok6I7IyJNPqMqrq",
       },
     },
   });
@@ -96,7 +98,7 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
     <div>
       <BackButton />
       <div className="mb-8">
-        {user?.emailAddresses[0].emailAddress === "smarkwisai@gmail.com" ? (
+        {user?.emailAddresses[0].emailAddress === "smarkwisai@gmail.com" && "whea_k@hotmail.com" ? (
           <>
             <h3>ผลเฉลยคำตอบ</h3>
 
@@ -154,7 +156,7 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
             <ButtonAction id={params.id} />
           </>
         ) : !answerByUserId &&
-          user?.emailAddresses[0].emailAddress !== "smarkwisai@gmail.com" ? (
+          user?.emailAddresses[0].emailAddress !== "smarkwisai@gmail.com" && "whea_k@hotmail.com" ? (
           <>
             <div className="flex flex-col items-center justify-center w-full space-y-6">
               <h2 className="text-2xl font-bold my-4">{post?.content}</h2>
