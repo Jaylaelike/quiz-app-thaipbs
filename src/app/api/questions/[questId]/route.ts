@@ -67,7 +67,12 @@ export async function GET(req: Request, context: contextProps){
             },
             include: {
               user: true,
-              Answers: true,
+              Answers: {
+                include: {
+                  user: true,
+                }
+              
+              },
 
 
             }

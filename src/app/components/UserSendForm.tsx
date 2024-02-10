@@ -112,12 +112,49 @@ const UserSendForm: FC<FormAnswerProps> = ({
       return res.data;
     },
   });
-  // console.log(dataAnswers?.Answers);
+  console.log(dataAnswers);
 
-  //filter answer by userId and questionId
+  //filter answer by role  of user is "admin" this data
+  // {
+  //   id: "clsfl3vm90001rk06mq3nffub",
+  //   content: "นายกคือใคร",
+  //   userId: "user_2Y4Ookbfem91BKQT1RNiSdWA3Gc",
+  //   status: "production",
+  //   createdAt: "2024-02-10T04:36:36.945Z",
+  //   user: {
+  //   id: "user_2Y4Ookbfem91BKQT1RNiSdWA3Gc",
+  //   username: "Sittichai",
+  //   email: "smarkwisai@gmail.com",
+  //   imageUrl: "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWTRPb2hZUXpHNnVraFNhNlYxNmxXSndTVzkifQ",
+  //   role: "admin"
+  //   },
+  //   Answers: [
+  //   {
+  //   id: "clsfl44hg0003rk06m0v0r50v",
+  //   content: "พิธา",
+  //   isCorrect: true,
+  //   questionId: "clsfl3vm90001rk06mq3nffub",
+  //   userId: "user_2Y4Ookbfem91BKQT1RNiSdWA3Gc",
+  //   createdAt: "2024-02-10T04:36:48.436Z"
+  //   },
+  //   {
+  //   id: "clsfl48xf0005rk064eb0zh9x",
+  //   content: "ลุงตู่",
+  //   isCorrect: false,
+  //   questionId: "clsfl3vm90001rk06mq3nffub",
+  //   userId: "user_2Y4Ookbfem91BKQT1RNiSdWA3Gc",
+  //   createdAt: "2024-02-10T04:36:54.195Z"
+  //   }
+  //   ]
+  //   }
   const answerIdbyUserId = dataAnswers?.Answers.filter(
-    (answer) => answer.userId === "user_2Y4Ookbfem91BKQT1RNiSdWA3Gc" && "user_2c7o0iubxsGtok6I7IyJNPqMqrq"
+    (answer) => answer.user.role === "admin"
   );
+  
+
+
+
+
 
   // console.log(answerIdbyUserId);
 

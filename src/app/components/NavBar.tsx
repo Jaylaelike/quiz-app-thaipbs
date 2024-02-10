@@ -5,9 +5,45 @@ import React from "react";
 import { useUser } from "@clerk/nextjs";
 import { SignOutButton } from "@clerk/nextjs";
 import RewardNavbar from "./RewardNavbar";
+import { useQuery } from "@tanstack/react-query";
+
+
+interface User {
+ 
+
+
+  id: string;
+  username: string;
+  email: string;
+  imageUrl: string;
+  role: string;
+  Rewards: [
+    {
+      id: string;
+      points: number;
+      userId: string;
+    }
+  ];
+
+
+}
 
 function NavBar() {
   const { isSignedIn, user } = useUser();
+
+  //get roll of user 
+   const { data: dataUser, isLoading: isLoadingUser } = useQuery<User>({
+
+    queryKey: ["user", user?.id],
+    queryFn: async () => {
+      const res = await fetch(`/api/users/${user?.id}`);
+      return res.json();
+    },
+
+  });
+
+  console.log(dataUser);
+
 
   console.log(user?.id);
 
@@ -24,7 +60,7 @@ function NavBar() {
             ยินดีต้อนรับคุณ: {user?.fullName || user?.username}
           </h4>
         </div>
-        {user?.emailAddresses[0].emailAddress === "smarkwisai@gmail.com" && "whea_k@hotmail.com" ? (
+        {dataUser?.role === "admin" ? (
           <div className="flex-none">
             <Link href="/create" className="btn btn-ghost">
               สร้างคำถาม

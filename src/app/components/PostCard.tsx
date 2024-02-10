@@ -5,6 +5,7 @@ import Link from "next/link";
 import React, { FC } from "react";
 import dayjs from "dayjs";
 import { useUser } from "@clerk/nextjs";
+import { useQuery } from "@tanstack/react-query";
 
 // interface PostCardProps {
 //   post: {
@@ -28,6 +29,28 @@ interface PostCardProps {
   };
 }
 
+interface User {
+ 
+
+
+  id: string;
+  username: string;
+  email: string;
+  imageUrl: string;
+  role: string;
+  Rewards: [
+    {
+      id: string;
+      points: number;
+      userId: string;
+    }
+  ];
+
+
+}
+
+
+
 const PostCard: FC<PostCardProps> = ({ post }) => {
   const { user } = useUser();
   const {
@@ -38,13 +61,28 @@ const PostCard: FC<PostCardProps> = ({ post }) => {
     user: { username },
   } = post;
 
+  //get roll of user 
+   const { data: dataUser, isLoading: isLoadingUser } = useQuery<User>({
+
+    queryKey: ["user", user?.id],
+    queryFn: async () => {
+      const res = await fetch(`/api/users/${user?.id}`);
+      return res.json();
+    },
+
+  });
+
+
+  console.log(dataUser);
+  
   return (
     <>
 
     {!user ? (  <div className="skeleton h-32 w-full"></div>) : 
 
    (<>
-      {user?.emailAddresses[0].emailAddress === "smarkwisai@gmail.com" || "whea_k@hotmail.com" ? (
+      {
+        dataUser?.role === "admin" ? (
         <div className="card w-full bg-base-100 shadow-xl border">
           <div className="card-body">
             <h2 className="card-title">

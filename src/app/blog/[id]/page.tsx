@@ -13,6 +13,16 @@ interface BlogDetailPageProps {
   };
 }
 
+//get role of user
+async function getRoleUser(userId: string) {
+  const res = await db.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+  return res;
+}
+
 async function getPost(id: string) {
   const res = await db.question.findFirst({
     where: {
@@ -29,16 +39,16 @@ async function getPost(id: string) {
 }
 
 //filter answer by userId and questionId
-async function getAnswers(questionId: string, userId: string) {
+async function getAnswers(questionId: string) {
   const res = await db.answer.findMany({
     where: {
       questionId: questionId,
-      userId: userId,
     },
     select: {
       content: true,
       isCorrect: true,
       createdAt: true,
+      user: true,
     },
   });
   return res;
@@ -55,15 +65,15 @@ async function getAnswerByUserId(userId: string, questionId: string) {
   return res;
 }
 
-//get all answers in questionId
+//get all answers in questionId form role not "admin"
 async function getAnswerAlluser(questionId: string) {
   const res = await db.answer.findMany({
     where: {
       questionId: questionId,
       NOT: {
-        userId: "user_2Y4Ookbfem91BKQT1RNiSdWA3Gc",
-      } || {
-        userId: "user_2c7o0iubxsGtok6I7IyJNPqMqrq",
+        user: {
+          role: "admin",
+        },
       },
     },
   });
@@ -81,8 +91,22 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
   const { userId } = auth();
   const user = await currentUser();
 
+  const roleUser = await getRoleUser(userId);
+  console.log(roleUser);
+
   const post = await getPost(params.id);
   const answers = await getAnswers(params.id, userId);
+
+  //filter answer by role of user is "admin"
+
+  const filterAnswer = answers.filter((answer) => {
+    return answer.user.role === "admin";
+  });
+  console.log(filterAnswer);
+
+  //
+
+  console.log(answers);
 
   //check answer have or not  by userId
   const answerByUserId = await getAnswerByUserId(userId, params.id);
@@ -98,7 +122,7 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
     <div>
       <BackButton />
       <div className="mb-8">
-        {user?.emailAddresses[0].emailAddress === "smarkwisai@gmail.com" && "whea_k@hotmail.com" ? (
+        {roleUser?.role === "admin" ? (
           <>
             <h3>ผลเฉลยคำตอบ</h3>
 
@@ -113,7 +137,7 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
               </thead>
               {/* body */}
               <tbody>
-                {answers.map((answer) => (
+                {filterAnswer.map((answer) => (
                   <tr key={answer.id}>
                     <td>{answer.content}</td>
                     <td>{answer.isCorrect ? "ถูก ✅" : "ผิด ❌"}</td>
@@ -155,8 +179,7 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
 
             <ButtonAction id={params.id} />
           </>
-        ) : !answerByUserId &&
-          user?.emailAddresses[0].emailAddress !== "smarkwisai@gmail.com" && "whea_k@hotmail.com" ? (
+        ) : !answerByUserId && roleUser?.role !== "admin" ? (
           <>
             <div className="flex flex-col items-center justify-center w-full space-y-6">
               <h2 className="text-2xl font-bold my-4">{post?.content}</h2>

@@ -13,6 +13,7 @@ export default authMiddleware({
     "/api/rewards/",
     "/api/rewards",
     "/api/questions/",
+    "/api/users",
   ],
 
   
