@@ -32,7 +32,7 @@ interface EditPostPageProps {
       }
     });
 
-    console.log(dataPost);
+    //console.log(dataPost);
     
     const {mutate: updatePost, isPending} = useMutation({
       mutationFn: (  newPost : FormInputPost) =>{

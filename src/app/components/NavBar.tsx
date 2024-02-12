@@ -42,10 +42,10 @@ function NavBar() {
 
   });
 
-  console.log(dataUser);
+  // console.log(dataUser);
 
 
-  console.log(user?.id);
+  // console.log(user?.id);
 
   return (
     <div className="navbar bg-neutral">

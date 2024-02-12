@@ -73,7 +73,7 @@ const PostCard: FC<PostCardProps> = ({ post }) => {
   });
 
 
-  console.log(dataUser);
+  //console.log(dataUser);
   
   return (
     <>

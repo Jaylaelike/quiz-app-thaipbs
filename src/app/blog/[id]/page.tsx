@@ -5,6 +5,7 @@ import React, { FC } from "react";
 import dayjs from "dayjs";
 import { auth, currentUser } from "@clerk/nextjs";
 import ButtonUserAction from "@/app/components/ButtonUserAction";
+import ButtonDeleteAns from "@/app/components/ButtonDeleteAns";
 
 interface BlogDetailPageProps {
   params: {
@@ -45,6 +46,7 @@ async function getAnswers(questionId: string) {
       questionId: questionId,
     },
     select: {
+      id: true,
       content: true,
       isCorrect: true,
       createdAt: true,
@@ -86,13 +88,23 @@ async function getUserAll() {
   return res;
 }
 
+// Delete answer by answerId
+async function deleteAnswer(answerId: string) {
+  const res = await db.answer.delete({
+    where: {
+      id: answerId,
+    },
+  });
+  return res;
+}
+
 // eslint-disable-next-line @next/next/no-async-client-component
 const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
   const { userId } = auth();
   const user = await currentUser();
 
   const roleUser = await getRoleUser(userId);
-  console.log(roleUser);
+  // console.log(roleUser);
 
   const post = await getPost(params.id);
   const answers = await getAnswers(params.id, userId);
@@ -102,11 +114,11 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
   const filterAnswer = answers.filter((answer) => {
     return answer.user.role === "admin";
   });
-  console.log(filterAnswer);
+  // console.log(filterAnswer);
 
   //
 
-  console.log(answers);
+  // console.log(answers);
 
   //check answer have or not  by userId
   const answerByUserId = await getAnswerByUserId(userId, params.id);
@@ -133,18 +145,28 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
                   <th>คำตอบ</th>
                   <th>เฉลย</th>
                   <th>อัพเดท</th>
+                  <th>ลบ</th>
                 </tr>
               </thead>
               {/* body */}
-              <tbody>
-                {filterAnswer.map((answer) => (
-                  <tr key={answer.id}>
-                    <td>{answer.content}</td>
-                    <td>{answer.isCorrect ? "ถูก ✅" : "ผิด ❌"}</td>
-                    <td>{dayjs(answer.createdAt).format("DD/MM/YYYY")}</td>
-                  </tr>
-                ))}
-              </tbody>
+              {!filterAnswer ? (
+                <>
+                  <span className="loading loading-lg"></span>
+                </>
+              ) : (
+                <tbody>
+                  {filterAnswer.map((answer) => (
+                    <tr key={answer.user.id}>
+                      <td>{answer.content}</td>
+                      <td>{answer.isCorrect ? "ถูก ✅" : "ผิด ❌"}</td>
+                      <td>{dayjs(answer.createdAt).format("DD/MM/YYYY")}</td>
+                      <td>
+                       <ButtonDeleteAns id={answer.id} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              )}
             </table>
 
             <h3>คำตอบจากผู้ท้าชิง</h3>
@@ -160,21 +182,27 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
                 </tr>
               </thead>
               {/* body */}
-              <tbody>
-                {answerAlluser.map((answer) => (
-                  <tr key={answer.id}>
-                    <td>
-                      {userAll.map((user) =>
-                        user.id === answer.userId ? user.username : null
-                      )}
-                    </td>
+              {!answerAlluser ? (
+                <>
+                  <span className="loading loading-lg"></span>
+                </>
+              ) : (
+                <tbody>
+                  {answerAlluser.map((answer) => (
+                    <tr key={answer.id}>
+                      <td>
+                        {userAll.map((user) =>
+                          user.id === answer.userId ? user.username : null
+                        )}
+                      </td>
 
-                    <td>{answer.content}</td>
-                    {answer.isCorrect ? <td>ถูก ✅</td> : <td>ผิด ❌</td>}
-                    <td>{dayjs(answer.createdAt).format("DD/MM/YYYY")}</td>
-                  </tr>
-                ))}
-              </tbody>
+                      <td>{answer.content}</td>
+                      {answer.isCorrect ? <td>ถูก ✅</td> : <td>ผิด ❌</td>}
+                      <td>{dayjs(answer.createdAt).format("DD/MM/YYYY")}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              )}
             </table>
 
             <ButtonAction id={params.id} />
