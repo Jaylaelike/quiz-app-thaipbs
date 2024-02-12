@@ -1,3 +1,4 @@
+import { users } from "@clerk/nextjs/api";
 import db from "../../lib/db";
 import React from "react";
 
@@ -9,12 +10,19 @@ async function getRewards() {
     orderBy: {
       points: "desc",
     },
+    where: {
+      user: {
+        role: "user",
+      },
+    },
   });
 
-  console.log(res);
+ // console.log(res);
 
   return res;
 }
+
+//filter getRewards() role of user
 
 async function page() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -40,6 +48,8 @@ async function page() {
   //   });
 
   const data = await getRewards();
+
+  //filter role of user is "user"
 
   //   console.log(data);
 
