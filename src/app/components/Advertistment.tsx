@@ -28,7 +28,7 @@ function Advertistment() {
             }`}
           >
             <img
-              src="https://res.cloudinary.com/satjay/image/upload/v1707470995/jwnoyl61jzqlchzyston.png"
+              src="https://res.cloudinary.com/satjay/image/upload/v1707816899/iwh9tova6lkaosdgluai.png"
               className="w-full"
             />
           </div>
@@ -39,7 +39,7 @@ function Advertistment() {
             }`}
           >
             <img
-              src="https://res.cloudinary.com/satjay/image/upload/v1707463991/ostxspdeakcsbmuzusrl.png"
+              src="https://res.cloudinary.com/satjay/image/upload/v1707816897/ookwjyq7pd9e4mxti0np.png"
               className="w-full"
             />
           </div>
@@ -50,7 +50,7 @@ function Advertistment() {
             }`}
           >
             <img
-              src="https://daisyui.com/images/stock/photo-1414694762283-acccc27bca85.jpg"
+              src="https://res.cloudinary.com/satjay/image/upload/v1707463991/ostxspdeakcsbmuzusrl.png"
               className="w-full"
             />
           </div>
