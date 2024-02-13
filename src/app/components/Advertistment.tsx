@@ -54,18 +54,6 @@ function Advertistment() {
               className="w-full"
             />
           </div>
-
-          <div
-            id="item4"
-            className={`carousel-item w-full slide-right ${
-              currentItem === 4 ? "block" : "hidden"
-            }`}
-          >
-            <img
-              src="https://daisyui.com/images/stock/photo-1414694762283-acccc27bca85.jpg"
-              className="w-full"
-            />
-          </div>
         </div>
       </div>
 
