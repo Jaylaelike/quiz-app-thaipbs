@@ -10,7 +10,7 @@ function Advertistment() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentItem((prevItem) => (prevItem % 4) + 1);
+      setCurrentItem((prevItem) => (prevItem % 3) + 1);
     }, 5000); // Change item every 3 seconds
 
     return () => clearInterval(interval); // Clean up on unmount
