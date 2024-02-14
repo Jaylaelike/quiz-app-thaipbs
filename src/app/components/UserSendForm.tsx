@@ -62,7 +62,7 @@ const UserSendForm: FC<FormAnswerProps> = ({
   const router = useRouter();
 
   //create post data
-  const { mutate: createAnswer } = useMutation({
+  const { mutate: createAnswer, isPending: createAnswerLoading } = useMutation({
     mutationFn: (newPost: FormInputAnswer) => {
       return axios.post("/api/answers/create", newPost);
     },
@@ -150,11 +150,15 @@ const UserSendForm: FC<FormAnswerProps> = ({
   const answerIdbyUserId = dataAnswers?.Answers.filter(
     (answer) => answer.user.role === "admin"
   );
-  
 
-
-
-
+  // //create  loading of onsubmit wait for done
+  // if (onsubmit === true) {
+  //   <div>
+  //     <>
+  //       <span className="loading loading-lg"></span>
+  //     </>
+  //   </div>;
+  // }
 
   // console.log(answerIdbyUserId);
 
@@ -265,9 +269,22 @@ const UserSendForm: FC<FormAnswerProps> = ({
           </div>
         ))}
 
-        <button type="submit" className="btn btn-warning w-full max-w-lg">
-          ส่งคำตอบ
-        </button>
+        {createAnswerLoading ? (
+          <span className="loading loading-lg"></span>
+        ) : (
+          <button
+            type="submit"
+            className="btn btn-warning w-full max-w-lg"
+            disabled={
+              isCorrect === null ||
+              isLoadingAnswers ||
+              isLoadingReward ||
+              onsubmit
+            }
+          >
+            ส่งคำตอบ
+          </button>
+        )}
       </form>
     </>
   );

@@ -7,11 +7,7 @@ import { SignOutButton } from "@clerk/nextjs";
 import RewardNavbar from "./RewardNavbar";
 import { useQuery } from "@tanstack/react-query";
 
-
 interface User {
- 
-
-
   id: string;
   username: string;
   email: string;
@@ -24,26 +20,21 @@ interface User {
       userId: string;
     }
   ];
-
-
 }
 
 function NavBar() {
   const { isSignedIn, user } = useUser();
 
-  //get roll of user 
-   const { data: dataUser, isLoading: isLoadingUser } = useQuery<User>({
-
+  //get roll of user
+  const { data: dataUser, isLoading: isLoadingUser } = useQuery<User>({
     queryKey: ["user", user?.id],
     queryFn: async () => {
       const res = await fetch(`/api/users/${user?.id}`);
       return res.json();
     },
-
   });
 
   // console.log(dataUser);
-
 
   // console.log(user?.id);
 
@@ -103,7 +94,12 @@ function NavBar() {
               อันดับ
             </Link>
           </li>
+          
+          <Link href={"/components/userguides"} className="justify-between">
+            วิธีเล่นเกม
+          </Link>
           <li>
+          <li></li>
             <SignOutButton />
           </li>
         </ul>

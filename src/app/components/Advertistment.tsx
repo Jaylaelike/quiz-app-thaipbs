@@ -10,7 +10,7 @@ function Advertistment() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentItem((prevItem) => (prevItem % 3) + 1);
+      setCurrentItem((prevItem) => (prevItem % 4) + 1);
     }, 5000); // Change item every 3 seconds
 
     return () => clearInterval(interval); // Clean up on unmount
@@ -28,7 +28,7 @@ function Advertistment() {
             }`}
           >
             <img
-              src="https://res.cloudinary.com/satjay/image/upload/v1707816899/iwh9tova6lkaosdgluai.png"
+              src="https://res.cloudinary.com/satjay/image/upload/v1707908263/mrsreoafgnoinzf6ynd4.png"
               className="w-full"
             />
           </div>
@@ -54,6 +54,18 @@ function Advertistment() {
               className="w-full"
             />
           </div>
+          <div
+            id="item4"
+            className={`carousel-item w-full slide-right ${
+              currentItem === 4 ? "block" : "hidden"
+            }`}
+          >
+            <img
+              src="https://res.cloudinary.com/satjay/image/upload/v1707816899/iwh9tova6lkaosdgluai.png"
+              className="w-full"
+            />
+          </div>
+
         </div>
       </div>
 
