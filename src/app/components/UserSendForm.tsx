@@ -8,6 +8,7 @@ import axios from "axios";
 
 import { useRouter } from "next/navigation";
 import JSConfetti from "js-confetti";
+import { on } from "events";
 
 interface FormAnswerProps {
   // submit: SubmitHandler<FormInputAnswer>;
@@ -53,6 +54,7 @@ const UserSendForm: FC<FormAnswerProps> = ({
         userId: userId || "",
       });
     }
+
     if (isCorrect === false) {
       updateReward({
         points: dataReward?.Rewards[0].points + 5,
@@ -87,11 +89,11 @@ const UserSendForm: FC<FormAnswerProps> = ({
     onError: (error) => {
       console.log(error);
     },
-    onSuccess: (data) => {
-      //  console.log(data);
-      router.push("/");
-      router.refresh();
-    },
+    // onSuccess: (data) => {
+    //   //  console.log(data);
+    //   router.push("/");
+    //   router.refresh();
+    // },
   });
 
   //fetch rewardId by userId
@@ -116,7 +118,6 @@ const UserSendForm: FC<FormAnswerProps> = ({
   });
   //console.log(dataAnswers);
 
- 
   const answerIdbyUserId = dataAnswers?.Answers.filter(
     (answer) => answer.user.role === "admin"
   );
@@ -168,6 +169,8 @@ const UserSendForm: FC<FormAnswerProps> = ({
       }
     }
   }, [onsubmit]);
+
+
 
   return (
     <>
