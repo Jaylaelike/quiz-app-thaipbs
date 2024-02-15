@@ -8,6 +8,7 @@ import axios from "axios";
 
 import { useRouter } from "next/navigation";
 import JSConfetti from "js-confetti";
+import { on } from "events";
 
 interface FormAnswerProps {
   // submit: SubmitHandler<FormInputAnswer>;
@@ -33,6 +34,8 @@ const UserSendForm: FC<FormAnswerProps> = ({
 
   const [onsubmit, setOnsubmit] = React.useState(false);
 
+ // const [isButtonClicked, setIsButtonClicked] = React.useState(false);
+
   // console.log(isCorrect);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -57,6 +60,7 @@ const UserSendForm: FC<FormAnswerProps> = ({
         userId: userId || "",
       });
     }
+
   };
 
   const router = useRouter();
@@ -70,7 +74,7 @@ const UserSendForm: FC<FormAnswerProps> = ({
       console.log(error);
     },
     onSuccess: (data) => {
-      console.log(data);
+    //  console.log(data);
       router.push("/");
       router.refresh();
       setOnsubmit(true);
@@ -86,7 +90,7 @@ const UserSendForm: FC<FormAnswerProps> = ({
       console.log(error);
     },
     onSuccess: (data) => {
-      console.log(data);
+    //  console.log(data);
       router.push("/");
       router.refresh();
     },
@@ -112,7 +116,7 @@ const UserSendForm: FC<FormAnswerProps> = ({
       return res.data;
     },
   });
-  console.log(dataAnswers);
+  //console.log(dataAnswers);
 
   //filter answer by role  of user is "admin" this data
   // {
@@ -251,7 +255,11 @@ const UserSendForm: FC<FormAnswerProps> = ({
           value={questionId}
         />
 
-        {answerIdbyUserId?.map((answer) => (
+{createAnswerLoading ? ( <span className="loading loading-lg"></span>): (
+  <>
+
+  {onsubmit ? (null) :(<>
+    {answerIdbyUserId?.map((answer) => (
           <div key={answer.id}>
             <input
               type="radio"
@@ -268,6 +276,11 @@ const UserSendForm: FC<FormAnswerProps> = ({
             <span className="label-text">{answer.content}</span>
           </div>
         ))}
+  </>)}
+     
+  </>
+)}
+     
 
         {createAnswerLoading ? (
           <span className="loading loading-lg"></span>
@@ -279,8 +292,18 @@ const UserSendForm: FC<FormAnswerProps> = ({
               isCorrect === null ||
               isLoadingAnswers ||
               isLoadingReward ||
-              onsubmit
+              onsubmit ||
+              createAnswerLoading
             }
+            // onClick={() => 
+            //   {
+            //     setOnsubmit(true)
+            //     setIsButtonClicked(true)
+            //   }
+            // }
+            
+
+            
           >
             ส่งคำตอบ
           </button>

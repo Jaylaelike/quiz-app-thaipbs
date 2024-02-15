@@ -31,7 +31,7 @@ function UserCreateAnswerPage({ params }: QuestionIdProps) {
       console.log(error);
     },
     onSuccess: (data) => {
-      console.log(data);
+    //  console.log(data);
       router.push("/");
       router.refresh();
     },
@@ -47,7 +47,7 @@ function UserCreateAnswerPage({ params }: QuestionIdProps) {
     },
   });
 
-  console.log(question?.content);
+//  console.log(question?.content);
 
 
 

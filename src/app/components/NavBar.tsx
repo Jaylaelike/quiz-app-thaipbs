@@ -20,6 +20,7 @@ interface User {
       userId: string;
     }
   ];
+  
 }
 
 function NavBar() {
@@ -99,7 +100,7 @@ function NavBar() {
             วิธีเล่นเกม
           </Link>
           <li>
-          <li></li>
+      
             <SignOutButton />
           </li>
         </ul>

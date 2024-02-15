@@ -58,7 +58,7 @@ function page() {
             {/* <p>รหัสเซสชั่น: {sessionId}</p> */}
 
             <div className="flex flex-rows space-x-4">
-              <p>คะแนน: {data?.Rewards[0].points}</p>
+              <p className="text-[70px] text-nowrap">คะแนน: {data?.Rewards[0].points}</p>
               <div className="rating">
                 <input
                   type="radio"

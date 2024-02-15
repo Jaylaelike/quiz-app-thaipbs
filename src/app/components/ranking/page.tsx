@@ -1,4 +1,3 @@
-import { users } from "@clerk/nextjs/api";
 import db from "../../lib/db";
 import React from "react";
 
@@ -7,9 +6,14 @@ async function getRewards() {
     include: {
       user: true,
     },
-    orderBy: {
-      points: "desc",
-    },
+    orderBy: [
+      {
+        points: "desc",
+      },
+      {
+        userId: "asc",
+      },
+    ],
     where: {
       user: {
         role: "user",
@@ -17,37 +21,54 @@ async function getRewards() {
     },
   });
 
- // console.log(res);
+  // console.log(res);
 
   return res;
 }
 
+//get answer createAt by user for first answer
+// async function getAnswerTimeStamp() {
+//   const res = await db.user.findMany({
+//     include: {
+//       Rewards: {
+//         orderBy: {
+//           points: "desc",
+//         },
+//       },
+
+//       Answers: {
+//         orderBy: {
+//           createdAt: "asc",
+//         },
+//       },
+//     },
+
+//     where: {
+//       role: "user",
+//     },
+//   });
+
+//   //  console.log(res);
+//   return res;
+// }
+
 //filter getRewards() role of user
 
 async function page() {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  //   const { data, isLoading } = useQuery({
-  //     queryKey: ["points"],
-  //     refetchInterval: 5000,
-  //     refetchOnWindowFocus: true,
-  //     retryOnMount: true,
-  //     refetchOnReconnect: true,
-  //     queryFn: async () => {
-  //       const res = await db.reward.findMany({
-  //         include: {
-  //           user: true,
-  //         },
-  //         orderBy: {
-  //           points: "desc",
-  //         },
-  //       });
-  //       // console.log(res);
-
-  //       return res;
-  //     },
-  //   });
-
   const data = await getRewards();
+
+  // const timeData = await getAnswerTimeStamp();
+
+  // console.log(timeData);
+
+  // //order result timeData by createdAt of first answer
+  // const data = timeData.sort(
+  //   (a: any, b: any) =>
+  //     dayjs(a.Answers[0].createdAt).unix() -
+  //     dayjs(b.Answers[0].createdAt).unix()
+  // );
+
+  // console.log(data);
 
   //filter role of user is "user"
 
