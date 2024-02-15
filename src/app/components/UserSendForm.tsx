@@ -8,7 +8,6 @@ import axios from "axios";
 
 import { useRouter } from "next/navigation";
 import JSConfetti from "js-confetti";
-import { on } from "events";
 
 interface FormAnswerProps {
   // submit: SubmitHandler<FormInputAnswer>;
@@ -34,7 +33,7 @@ const UserSendForm: FC<FormAnswerProps> = ({
 
   const [onsubmit, setOnsubmit] = React.useState(false);
 
- // const [isButtonClicked, setIsButtonClicked] = React.useState(false);
+  // const [isButtonClicked, setIsButtonClicked] = React.useState(false);
 
   // console.log(isCorrect);
 
@@ -60,7 +59,6 @@ const UserSendForm: FC<FormAnswerProps> = ({
         userId: userId || "",
       });
     }
-
   };
 
   const router = useRouter();
@@ -74,7 +72,7 @@ const UserSendForm: FC<FormAnswerProps> = ({
       console.log(error);
     },
     onSuccess: (data) => {
-    //  console.log(data);
+      //  console.log(data);
       router.push("/");
       router.refresh();
       setOnsubmit(true);
@@ -90,7 +88,7 @@ const UserSendForm: FC<FormAnswerProps> = ({
       console.log(error);
     },
     onSuccess: (data) => {
-    //  console.log(data);
+      //  console.log(data);
       router.push("/");
       router.refresh();
     },
@@ -118,39 +116,7 @@ const UserSendForm: FC<FormAnswerProps> = ({
   });
   //console.log(dataAnswers);
 
-  //filter answer by role  of user is "admin" this data
-  // {
-  //   id: "clsfl3vm90001rk06mq3nffub",
-  //   content: "นายกคือใคร",
-  //   userId: "user_2Y4Ookbfem91BKQT1RNiSdWA3Gc",
-  //   status: "production",
-  //   createdAt: "2024-02-10T04:36:36.945Z",
-  //   user: {
-  //   id: "user_2Y4Ookbfem91BKQT1RNiSdWA3Gc",
-  //   username: "Sittichai",
-  //   email: "smarkwisai@gmail.com",
-  //   imageUrl: "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18yWTRPb2hZUXpHNnVraFNhNlYxNmxXSndTVzkifQ",
-  //   role: "admin"
-  //   },
-  //   Answers: [
-  //   {
-  //   id: "clsfl44hg0003rk06m0v0r50v",
-  //   content: "พิธา",
-  //   isCorrect: true,
-  //   questionId: "clsfl3vm90001rk06mq3nffub",
-  //   userId: "user_2Y4Ookbfem91BKQT1RNiSdWA3Gc",
-  //   createdAt: "2024-02-10T04:36:48.436Z"
-  //   },
-  //   {
-  //   id: "clsfl48xf0005rk064eb0zh9x",
-  //   content: "ลุงตู่",
-  //   isCorrect: false,
-  //   questionId: "clsfl3vm90001rk06mq3nffub",
-  //   userId: "user_2Y4Ookbfem91BKQT1RNiSdWA3Gc",
-  //   createdAt: "2024-02-10T04:36:54.195Z"
-  //   }
-  //   ]
-  //   }
+ 
   const answerIdbyUserId = dataAnswers?.Answers.filter(
     (answer) => answer.user.role === "admin"
   );
@@ -166,33 +132,39 @@ const UserSendForm: FC<FormAnswerProps> = ({
 
   // console.log(answerIdbyUserId);
 
-  if (onsubmit) {
-    const confetti = new JSConfetti();
-    if (isCorrect === true) {
-      confetti.addConfetti();
-    }
-    if (isCorrect === false) {
-      // console.log("false");
-      confetti.addConfetti({
-        emojis: ["❌"],
-      });
-    }
-  }
+  // if (onsubmit) {
+  //   const confetti = new JSConfetti();
+  //   if (isCorrect === true) {
+  //     confetti.addConfetti();
+  //   }
+  //   if (isCorrect === false) {
+  //     // console.log("false");
+  //     confetti.addConfetti({
+  //       emojis: ["❌"],
+  //     });
+  //   }
+  // }
 
   //create useEffect for play audio on submit form url
   React.useEffect(() => {
-    if (onsubmit === true) {
+    if (onsubmit) {
       if (isCorrect === true) {
         const audio = new Audio(
           "https://smongmtkwekplybenfjr.supabase.co/storage/v1/object/public/audio/True_answer.mp3"
         );
         audio.play();
+        const confetti = new JSConfetti();
+        confetti.addConfetti();
       }
       if (isCorrect === false) {
         const audio = new Audio(
           "https://smongmtkwekplybenfjr.supabase.co/storage/v1/object/public/audio/Fail_answer.mp3"
         );
         audio.play();
+        const confetti = new JSConfetti();
+        confetti.addConfetti({
+          emojis: ["❌"],
+        });
       }
     }
   }, [onsubmit]);
@@ -255,32 +227,35 @@ const UserSendForm: FC<FormAnswerProps> = ({
           value={questionId}
         />
 
-{createAnswerLoading ? ( <span className="loading loading-lg"></span>): (
-  <>
+        {createAnswerLoading ? (
+          <span className="loading loading-lg"></span>
+        ) : (
+          <>
+            {onsubmit ? null : (
+              <>
+                {answerIdbyUserId?.map((answer) => (
+                  <div key={answer.id}>
+                    <input
+                      type="radio"
+                      value={
+                        answer.content + " " + (answer.isCorrect ? true : false)
+                      }
+                      className="radio radio-primary"
+                      onChange={() => {
+                        setIsCorrect(answer.isCorrect ? true : false);
 
-  {onsubmit ? (null) :(<>
-    {answerIdbyUserId?.map((answer) => (
-          <div key={answer.id}>
-            <input
-              type="radio"
-              value={answer.content + " " + (answer.isCorrect ? true : false)}
-              className="radio radio-primary"
-              onChange={() => {
-                setIsCorrect(answer.isCorrect ? true : false);
+                        setContent(answer.content);
+                      }}
+                      checked={isCorrect === (answer.isCorrect ? true : false)}
+                    />
 
-                setContent(answer.content);
-              }}
-              checked={isCorrect === (answer.isCorrect ? true : false)}
-            />
-
-            <span className="label-text">{answer.content}</span>
-          </div>
-        ))}
-  </>)}
-     
-  </>
-)}
-     
+                    <span className="label-text">{answer.content}</span>
+                  </div>
+                ))}
+              </>
+            )}
+          </>
+        )}
 
         {createAnswerLoading ? (
           <span className="loading loading-lg"></span>
@@ -295,15 +270,6 @@ const UserSendForm: FC<FormAnswerProps> = ({
               onsubmit ||
               createAnswerLoading
             }
-            // onClick={() => 
-            //   {
-            //     setOnsubmit(true)
-            //     setIsButtonClicked(true)
-            //   }
-            // }
-            
-
-            
           >
             ส่งคำตอบ
           </button>
