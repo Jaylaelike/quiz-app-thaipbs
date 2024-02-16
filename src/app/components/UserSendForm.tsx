@@ -8,7 +8,6 @@ import axios from "axios";
 
 import { useRouter } from "next/navigation";
 import JSConfetti from "js-confetti";
-import { on } from "events";
 
 interface FormAnswerProps {
   // submit: SubmitHandler<FormInputAnswer>;
@@ -34,7 +33,9 @@ const UserSendForm: FC<FormAnswerProps> = ({
 
   const [onsubmit, setOnsubmit] = React.useState(false);
 
-  // const [isButtonClicked, setIsButtonClicked] = React.useState(false);
+  //const [isButtonClicked, setIsButtonClicked] = React.useState(false);
+
+  //const [isButtonClicked, setIsButtonClicked] = React.useState(false);
 
   // console.log(isCorrect);
 
@@ -48,19 +49,19 @@ const UserSendForm: FC<FormAnswerProps> = ({
       isCorrect: isCorrect,
     });
 
-    if (isCorrect === true) {
-      updateReward({
-        points: dataReward?.Rewards[0].points + 10,
-        userId: userId || "",
-      });
-    }
+    // if (isCorrect === true) {
+    //   updateReward({
+    //     points: dataReward?.Rewards[0].points + 10,
+    //     userId: userId || "",
+    //   });
+    // }
 
-    if (isCorrect === false) {
-      updateReward({
-        points: dataReward?.Rewards[0].points + 5,
-        userId: userId || "",
-      });
-    }
+    // if (isCorrect === false) {
+    //   updateReward({
+    //     points: dataReward?.Rewards[0].points + 5,
+    //     userId: userId || "",
+    //   });
+    // }
   };
 
   const router = useRouter();
@@ -148,7 +149,7 @@ const UserSendForm: FC<FormAnswerProps> = ({
 
   //create useEffect for play audio on submit form url
   React.useEffect(() => {
-    if (onsubmit) {
+    if (onsubmit === true) {
       if (isCorrect === true) {
         const audio = new Audio(
           "https://smongmtkwekplybenfjr.supabase.co/storage/v1/object/public/audio/True_answer.mp3"
@@ -156,6 +157,11 @@ const UserSendForm: FC<FormAnswerProps> = ({
         audio.play();
         const confetti = new JSConfetti();
         confetti.addConfetti();
+
+        // updateReward({
+        //   points: dataReward?.Rewards[0].points + 10,
+        //   userId: userId || "",
+        // });
       }
       if (isCorrect === false) {
         const audio = new Audio(
@@ -166,11 +172,14 @@ const UserSendForm: FC<FormAnswerProps> = ({
         confetti.addConfetti({
           emojis: ["❌"],
         });
+
+        // updateReward({
+        //   points: dataReward?.Rewards[0].points + 5,
+        //   userId: userId || "",
+        // });
       }
     }
   }, [onsubmit]);
-
-
 
   return (
     <>
@@ -273,6 +282,25 @@ const UserSendForm: FC<FormAnswerProps> = ({
               onsubmit ||
               createAnswerLoading
             }
+            onClick={async () => {
+              //setIsButtonClicked(true);
+              router.push("/");
+
+
+              if (isCorrect === true) {
+                await updateReward({
+                  points: dataReward?.Rewards[0].points + 10,
+                  userId: userId || "",
+                });
+              }
+
+              if (isCorrect === false) {
+                await updateReward({
+                  points: dataReward?.Rewards[0].points + 5,
+                  userId: userId || "",
+                });
+              }
+            }}
           >
             ส่งคำตอบ
           </button>
