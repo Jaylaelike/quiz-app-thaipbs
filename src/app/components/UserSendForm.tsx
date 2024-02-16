@@ -9,6 +9,36 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import JSConfetti from "js-confetti";
 
+interface FormAnswerChecksProps {
+  id: string;
+  content: string;
+  userId: string;
+  status: string;
+  createdAt: string;
+  user: {
+    id: string;
+    username: string;
+    email: string;
+    imageUrl: string;
+    role: string;
+  };
+  Answers: Array<{
+    id: string;
+    content: string;
+    isCorrect: boolean;
+    questionId: string;
+    userId: string;
+    createdAt: string;
+    user: {
+      id: string;
+      username: string;
+      email: string;
+      imageUrl: string;
+      role: string;
+    };
+  }>;
+}
+
 interface FormAnswerProps {
   // submit: SubmitHandler<FormInputAnswer>;
   // isEditing: boolean;
@@ -36,8 +66,6 @@ const UserSendForm: FC<FormAnswerProps> = ({
   //const [isButtonClicked, setIsButtonClicked] = React.useState(false);
 
   //const [isButtonClicked, setIsButtonClicked] = React.useState(false);
-
-  // console.log(isCorrect);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -122,6 +150,44 @@ const UserSendForm: FC<FormAnswerProps> = ({
   const answerIdbyUserId = dataAnswers?.Answers.filter(
     (answer) => answer.user.role === "admin"
   );
+
+  //fecth answer by userId and questionId
+  const {
+    data: answerIdbyUserIdChecking,
+    isLoading: isLoadingAnswerByUserIdChecking,
+  } = useQuery<FormAnswerChecksProps>({
+    queryKey: ["AnswerByUserIdChecking", questionId],
+    queryFn: async () => {
+      const res = await axios.get(`/api/questions/${questionId}`);
+      return res.data;
+    },
+    refetchInterval: 1000,
+    refetchOnWindowFocus: true,
+    retryOnMount: true,
+    refetchOnReconnect: true,
+  });
+
+  // console.log(answerIdbyUserIdChecking?.Answers);
+
+  //filter answer by userId
+  const answerIdbyUserIdfilter = answerIdbyUserIdChecking?.Answers.filter(
+    (answer) => answer.userId === userId
+  );
+
+  // console.log(answerIdbyUserIdfilter);
+
+  //filter answer by  questionId
+  const answerIdbyUserIdfilterNew = answerIdbyUserIdfilter?.filter(
+    (answer) => answer.questionId === questionId
+  );
+
+  // console.log(answerIdbyUserIdfilterNew);
+
+  //check answer  have or not by userId and questionId
+
+  // const answerIdbyUserIdfilter = answerIdbyUserIdChecking?.AnswerByUserIdChecking;
+
+  // console.log(answerIdbyUserIdfilter);
 
   // //create  loading of onsubmit wait for done
   // if (onsubmit === true) {
@@ -280,12 +346,12 @@ const UserSendForm: FC<FormAnswerProps> = ({
               isLoadingAnswers ||
               isLoadingReward ||
               onsubmit ||
-              createAnswerLoading
+              createAnswerLoading ||
+              answerIdbyUserIdfilterNew?.length > 0
             }
             onClick={async () => {
               //setIsButtonClicked(true);
               router.push("/");
-
 
               if (isCorrect === true) {
                 await updateReward({

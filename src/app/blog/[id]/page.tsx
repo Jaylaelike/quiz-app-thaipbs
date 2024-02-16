@@ -100,6 +100,8 @@ async function deleteAnswer(answerId: string) {
 
 // eslint-disable-next-line @next/next/no-async-client-component
 const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
+
+
   const { userId } = auth();
   const user = await currentUser();
 
@@ -107,7 +109,10 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
   // console.log(roleUser);
 
   const post = await getPost(params.id);
-  const answers = await getAnswers(params.id, userId);
+
+ const answers = await getAnswers(params.id, userId);
+
+
 
   //filter answer by role of user is "admin"
 
@@ -129,6 +134,9 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
 
   const userAll = await getUserAll();
   // console.log(userAll);
+
+
+
 
   return (
     <div>
