@@ -264,7 +264,7 @@ const UserSendForm: FC<FormAnswerProps> = ({
               d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <span>เย้! ยินดีด้วยคุณตอบถูก ได้รับ 10 คะแนน</span>
+          <span>เย้! ยินดีด้วยคุณตอบถูก ได้รับ 5 คะแนน</span>
         </div>
       )}
 
@@ -283,7 +283,7 @@ const UserSendForm: FC<FormAnswerProps> = ({
               d="M6 18L18 6M6 6l12 12"
             />
           </svg>
-          <span>เสียใจด้วยคุณตอบผิด ได้รับ 5 คะแนน</span>
+          <span>เสียใจด้วยคุณตอบผิด ได้รับ 0 คะแนน</span>
         </div>
       )}
 
@@ -355,17 +355,12 @@ const UserSendForm: FC<FormAnswerProps> = ({
 
               if (isCorrect === true) {
                 await updateReward({
-                  points: dataReward?.Rewards[0].points + 10,
-                  userId: userId || "",
-                });
-              }
-
-              if (isCorrect === false) {
-                await updateReward({
                   points: dataReward?.Rewards[0].points + 5,
                   userId: userId || "",
                 });
               }
+
+          
             }}
           >
             ส่งคำตอบ

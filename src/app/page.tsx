@@ -43,7 +43,7 @@ async function newUser() {
   //create a new user Reward initally set to 0
   await db.reward.create({
     data: {
-      points: 50,
+      points: 0,
       userId: res.id,
     },
   });

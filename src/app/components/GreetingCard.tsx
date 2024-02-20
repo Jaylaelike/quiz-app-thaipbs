@@ -21,7 +21,8 @@ function GreetingCard({ username, fisrtLogin }: UserNameProps) {
               <h3 className="font-bold text-lg">🎉 สวัสดีค่ะ!</h3>
               <p className="py-4">ยินดีต้อนรับคุณ {username}</p>
               <p className="py-4">🩵 ยินดีด้วย 🩵</p>
-              <p className="py-4">🏆 โปรโมชั่นเข้าใช้งานครั้งแรกรับไปเลย 50 คะแนน 🏆</p>
+              {/* <p className="py-4">🏆 โปรโมชั่นเข้าใช้งานครั้งแรกรับไปเลย 50 คะแนน 🏆</p> */}
+              <p className="py-4">คุณได้เป็นสมาชิกเข้าร่วมชิงรางวัลแล้ว 🏆</p>
               <div className="modal-action">
                 
                 <form method="dialog">
