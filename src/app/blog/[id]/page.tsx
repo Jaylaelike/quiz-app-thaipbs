@@ -220,8 +220,8 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
             <div className="flex flex-col items-center justify-center w-full space-y-6">
               <h2 className="text-2xl font-bold my-4">{post?.content}</h2>
               <p>โดย: {post?.user?.username}</p>
-              <p>ตอบคำถามถูกรับ 10 คะแนน</p>
-              <p>ตอบคำถามผิดได้ 5 คะแนน</p>
+              <p>ตอบคำถามถูกรับ 5 คะแนน 🥳</p>
+              <p>ตอบคำถามผิดได้ 0 คะแนน 😏</p>
               <ButtonUserAction id={params.id} />
             </div>
           </>
