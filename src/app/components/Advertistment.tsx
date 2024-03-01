@@ -28,7 +28,7 @@ function Advertistment() {
             }`}
           >
             <img
-              src="https://res.cloudinary.com/satjay/image/upload/v1707908263/mrsreoafgnoinzf6ynd4.png"
+              src="https://res.cloudinary.com/satjay/image/upload/v1709269404/mkfx8m1dk5sqsjm3eawf.png"
               className="w-full"
             />
           </div>
@@ -39,7 +39,7 @@ function Advertistment() {
             }`}
           >
             <img
-              src="https://res.cloudinary.com/satjay/image/upload/v1707816897/ookwjyq7pd9e4mxti0np.png"
+              src="https://res.cloudinary.com/satjay/image/upload/v1707908263/mrsreoafgnoinzf6ynd4.png"
               className="w-full"
             />
           </div>
