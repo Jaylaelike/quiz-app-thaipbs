@@ -68,8 +68,10 @@ export default async function Home() {
 
     return (
       <>
-        <div className="grid grid-rows-1 w-full  text-white text-center py-1">
+        <div className=" w-full  text-white text-center py-1">
+        <div className="carousel rounded-box w-full z-10">
           <Advertistment />
+          </div>
         </div>
         <main className="grid items-center justify-center md:grid-cols-2 lg:grid-cols-3 gap-4 mt-10">
           {post.map((post) => (

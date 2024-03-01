@@ -63,7 +63,7 @@ function NavBar() {
         <RewardNavbar id={user?.id || ""} />
       </div>
 
-      <div className="dropdown dropdown-end">
+      <div className="dropdown dropdown-end z-20">
         <div
           tabIndex={0}
           role="button"

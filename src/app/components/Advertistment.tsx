@@ -1,104 +1,50 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
 
-import { Circle } from "lucide-react";
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
+import { Pagination, Autoplay } from "swiper/modules";
 
 function Advertistment() {
-  //create roll loop interval for the carousel items using use useEffect and usestate
+  const images = [
+    "https://res.cloudinary.com/satjay/image/upload/v1709269404/mkfx8m1dk5sqsjm3eawf.png",
+    "https://res.cloudinary.com/satjay/image/upload/v1707908263/mrsreoafgnoinzf6ynd4.png",
+    "https://res.cloudinary.com/satjay/image/upload/v1707463991/ostxspdeakcsbmuzusrl.png",
+    "https://res.cloudinary.com/satjay/image/upload/v1707816899/iwh9tova6lkaosdgluai.png",
+  ];
 
-  const [currentItem, setCurrentItem] = useState(1);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentItem((prevItem) => (prevItem % 4) + 1);
-    }, 5000); // Change item every 3 seconds
-
-    return () => clearInterval(interval); // Clean up on unmount
-  }, []);
+  const pagination = {
+    clickable: true,
+    renderBullet: function (index, className) {
+      return '<span class="' + className + '">' + (index + 1) + "</span>";
+    },
+  };
 
   return (
-    <>
-      <div className="flex flex-col items-center justify-center w-full ">
-        <div className="carousel rounded-box w-full">
-          {/* Show the carousel items based on the currentItem state */}
-          <div
-            id="item1"
-            className={`carousel-item w-full slide-right ${
-              currentItem === 1 ? "block" : "hidden"
-            }`}
-          >
-            <img
-              src="https://res.cloudinary.com/satjay/image/upload/v1709269404/mkfx8m1dk5sqsjm3eawf.png"
-              className="w-full"
-            />
-          </div>
-          <div
-            id="item2"
-            className={`carousel-item w-full slide-right ${
-              currentItem === 2 ? "block" : "hidden"
-            }`}
-          >
-            <img
-              src="https://res.cloudinary.com/satjay/image/upload/v1707908263/mrsreoafgnoinzf6ynd4.png"
-              className="w-full"
-            />
-          </div>
-          <div
-            id="item3"
-            className={`carousel-item w-full slide-right ${
-              currentItem === 3 ? "block" : "hidden"
-            }`}
-          >
-            <img
-              src="https://res.cloudinary.com/satjay/image/upload/v1707463991/ostxspdeakcsbmuzusrl.png"
-              className="w-full"
-            />
-          </div>
-          <div
-            id="item4"
-            className={`carousel-item w-full slide-right ${
-              currentItem === 4 ? "block" : "hidden"
-            }`}
-          >
-            <img
-              src="https://res.cloudinary.com/satjay/image/upload/v1707816899/iwh9tova6lkaosdgluai.png"
-              className="w-full"
-            />
-          </div>
-
-        </div>
-      </div>
-
-      <div className="flex justify-center w-full py-2 gap-2">
-        <div
-          className={`btn btn-xs ${currentItem === 1 ? "active" : ""}`}
-          onClick={() => setCurrentItem(1)}
-        >
-          <a className="btn btn-xs">
-            <Circle size={10} />
-          </a>
-        </div>
-
-        <div
-          className={`btn btn-xs ${currentItem === 2 ? "active" : ""}`}
-          onClick={() => setCurrentItem(2)}
-        >
-          {" "}
-          <a className="btn btn-xs">
-            <Circle size={10} />
-          </a>
-        </div>
-        <div
-          className={`btn btn-xs ${currentItem === 3 ? "active" : ""}`}
-          onClick={() => setCurrentItem(3)}
-        >
-          {" "}
-          <a className="btn btn-xs">
-            <Circle size={10} />
-          </a>
-        </div>
-      </div>
-    </>
+    <div className="flex flex-col items-center justify-center w-full">
+      <Swiper
+        spaceBetween={50}
+        slidesPerView={1}
+        pagination={pagination}
+        modules={[Pagination, Autoplay]}
+        autoplay={{
+          delay: 5000,
+          disableOnInteraction: false,
+        }}
+        onSlideChange={() => console.log("slide change")}
+        onSwiper={(swiper) => console.log(swiper)}
+      >
+        {images.map((image, index) => (
+          <SwiperSlide key={index}>
+            <img src={image} className="w-full" />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
   );
 }
 
