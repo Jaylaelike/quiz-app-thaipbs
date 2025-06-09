@@ -3,11 +3,11 @@ generator client {
 }
 
 datasource db {
-  provider     = "postgresql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
-  // directUrl = env("DIRECT_URL")
-  //shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  directUrl         = env("DIRECT_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  relationMode      = "prisma"
 }
 
 model User {
@@ -25,11 +25,11 @@ model Question {
   id           String   @id @default(cuid())
   content      String
   userId       String
+  createdAt    DateTime @default(now())
+  status       String   @default("pending")
+  rewardPoints Int?     @default(0)
   user         User     @relation(fields: [userId], references: [id])
   answers      Answer[]
-  createdAt    DateTime @default(now())
-  status       String   @default("pending") // pending, approved, rejected
-  rewardPoints Int?     @default(0)
 }
 
 model Reward {
