@@ -1,30 +1,102 @@
-import db from "../../lib/db";
-import React from "react";
+'use client';
 
-async function getRewards() {
-  const res = await db.reward.findMany({
-    include: {
-      user: true,
+import React, { useEffect, useState } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useQuery } from "@tanstack/react-query";
+
+// Define the User interface, similar to NavBar.tsx, to include role
+interface UserProfile {
+  id: string;
+  username: string;
+  email: string;
+  imageUrl: string;
+  role: string; // Crucial for admin check
+  // Add other fields your /api/users/:id endpoint returns
+}
+
+// Define the Reward type for ranking data
+interface Reward {
+  id: string;
+  points: number;
+  user: {
+    id: string;
+    username: string;
+    imageUrl?: string | null;
+  };
+  // Add other fields from your rewards data structure
+}
+
+// The main component, now a client component
+export default function RankingPage() {
+  const { isSignedIn, user: clerkUser } = useUser(); // Clerk user object
+  const [rankingData, setRankingData] = useState<Reward[]>([]);
+  const [isLoadingRankings, setIsLoadingRankings] = useState(true);
+  const [adminMessage, setAdminMessage] = useState('');
+  const [isResetting, setIsResetting] = useState(false);
+
+  // Fetch user's detailed profile including role
+  const { data: currentUserProfile, isLoading: isLoadingUserProfile } = useQuery<UserProfile>({
+    queryKey: ['userProfile', clerkUser?.id],
+    queryFn: async () => {
+      if (!clerkUser?.id) throw new Error('User ID not available');
+      const res = await fetch(`/api/users/${clerkUser.id}`);
+      if (!res.ok) throw new Error('Failed to fetch user profile');
+      return res.json();
     },
-    orderBy: [
-      {
-        points: "desc",
-      },
-      {
-        userId: "asc",
-      },
-    ],
-    where: {
-      user: {
-        role: "user",
-      },
-    },
+    enabled: !!isSignedIn && !!clerkUser?.id, // Only run if signed in and clerkUser.id is available
   });
 
-  // console.log(res);
+  // Fetch ranking data
+  useEffect(() => {
+    async function loadRankingData() {
+      setIsLoadingRankings(true);
+      try {
+        // IMPORTANT: You need an API endpoint to serve this data.
+        // Replace '/api/rewards' with your actual endpoint if different.
+        const response = await fetch('/api/rewards'); 
+        if (!response.ok) {
+          throw new Error('Failed to fetch ranking data');
+        }
+        const data = await response.json();
+        setRankingData(data);
+      } catch (error) {
+        console.error("Error loading ranking data:", error);
+        setRankingData([]); // Set to empty or handle error state appropriately
+      }
+      setIsLoadingRankings(false);
+    }
+    loadRankingData();
+  }, []);
 
-  return res;
-}
+  const handleResetRewards = async () => {
+    if (!confirm('Are you sure you want to reset all user rewards? This action cannot be undone.')) {
+      return;
+    }
+    setIsResetting(true);
+    setAdminMessage('');
+    try {
+      const response = await fetch('/api/admin/reset-rewards', {
+        method: 'POST',
+        // Headers might be needed if your Clerk setup requires sending a token
+      });
+      const result = await response.json();
+      if (response.ok) {
+        setAdminMessage(`Success: ${result.message} (${result.count} records deleted). Rankings will update on next data load or refresh.`);
+        // Optionally, re-fetch ranking data: loadRankingData();
+      } else {
+        setAdminMessage(`Error: ${result.message || 'Failed to reset rewards.'}`);
+      }
+    } catch (error) {
+      console.error('Failed to reset rewards:', error);
+      setAdminMessage('Error: An unexpected error occurred.');
+    } finally {
+      setIsResetting(false);
+    }
+  };
+
+  // Original server-side getRewards function is no longer used directly here.
+  // Data is fetched via useEffect.
+  // The orphaned body of the old getRewards function has been removed.
 
 //get answer createAt by user for first answer
 // async function getAnswerTimeStamp() {
@@ -54,8 +126,8 @@ async function getRewards() {
 
 //filter getRewards() role of user
 
-async function page() {
-  const data = await getRewards();
+// The `page` function is replaced by RankingPage client component.
+  // const data = await getRewards(); // This line is removed.
 
   // const timeData = await getAnswerTimeStamp();
 
@@ -74,9 +146,13 @@ async function page() {
 
   //   console.log(data);
 
-  //   if (isLoading) {
-  //     return <div>Loading...</div>;
-  //   }
+  if (isLoadingRankings || (isSignedIn && isLoadingUserProfile && !currentUserProfile)) {
+    return (
+      <div className="flex flex-col items-center justify-center w-full min-h-screen">
+        <div>Loading rankings and user data...</div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -141,9 +217,9 @@ async function page() {
                       </tr>
                     </thead>
                     <tbody>
-                      {data.map((reward: any) => (
+                      {rankingData.map((reward: Reward) => (
                         <tr key={reward.id}>
-                          <td>{data.indexOf(reward) + 1}</td>
+                          <td>{rankingData.indexOf(reward) + 1}</td>
                           <td>
                             <div className="avatar">
                               <div className="w-10 rounded-full">
@@ -187,8 +263,26 @@ async function page() {
           </div>
         </div>
       </div>
+
+      {/* Admin Section: Reset Rewards - Visible only to admins */}
+      {isSignedIn && currentUserProfile?.role === 'admin' && (
+        <div className="flex flex-col items-center justify-center w-full mt-8 p-4 border-t-2 border-red-500">
+          <div className="card w-auto bg-base-96 shadow-xl p-4">
+            <h2 className="card-title text-red-600">Admin Controls</h2>
+            <p className="text-sm mb-2">This action will delete all user scores and reset the leaderboard.</p>
+            <button 
+              onClick={handleResetRewards} 
+              disabled={isResetting || isLoadingUserProfile}
+              className="btn btn-error"
+            >
+              {isResetting ? 'Resetting...' : 'Reset All User Rewards'}
+            </button>
+            {adminMessage && <p className={`mt-2 ${adminMessage.startsWith('Success') ? 'text-green-500' : 'text-red-500'}`}>{adminMessage}</p>}
+          </div>
+        </div>
+      )}
     </>
   );
 }
 
-export default page;
+// The default export is now RankingPage, no longer the async function `page`.

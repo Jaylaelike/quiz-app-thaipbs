@@ -42,6 +42,7 @@ export async function PATCH(req: Request, context: contextProps) {
       data: {
         content: body.content,
         status: body.status,
+        rewardPoints: body.rewardPoints,
       },
     });
 
@@ -67,14 +68,11 @@ export async function GET(req: Request, context: contextProps){
             },
             include: {
               user: true,
-              Answers: {
+              answers: {
                 include: {
                   user: true,
                 }
-              
               },
-
-
             }
     
         });

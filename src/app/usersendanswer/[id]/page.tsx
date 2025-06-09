@@ -1,14 +1,10 @@
 "use client";
 import React from "react";
-import AnswerFormPost from "../../components/AnswerFormPost";
-import BackButton from "../../components/BackButton";
-import { SubmitHandler } from "react-hook-form";
-import { FormInputAnswer } from "../../types";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import UserSendForm from "@/app/components/UserSendForm";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import GameQuizInterface from "../../components/GameQuizInterface";
+import UserSendForm from "../../components/UserSendForm";
+import BackButton from "../../components/BackButton";
 
 interface QuestionIdProps {
   params: {
@@ -17,29 +13,8 @@ interface QuestionIdProps {
 }
 
 function UserCreateAnswerPage({ params }: QuestionIdProps) {
-  const handleCreateAnswer: SubmitHandler<FormInputAnswer> = async (data) => {
-    createAnswer(data);
-  };
-
-  const router = useRouter();
-
-  const { mutate: createAnswer } = useMutation({
-    mutationFn: (newPost: FormInputAnswer) => {
-      return axios.post("/api/answers/create", newPost);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-    onSuccess: (data) => {
-    //  console.log(data);
-      router.push("/");
-      router.refresh();
-    },
-  });
-
-
-  //fetch content question 
-  const { data: question, isLoading: isLoadingQuestion } = useQuery({
+  // Fetch question to check if it has admin answers
+  const { data: question, isLoading } = useQuery({
     queryKey: ["question", params.id],
     queryFn: async () => {
       const res = await axios.get(`/api/questions/${params.id}`);
@@ -47,23 +22,43 @@ function UserCreateAnswerPage({ params }: QuestionIdProps) {
     },
   });
 
-//  console.log(question?.content);
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="loading loading-spinner loading-lg"></div>
+      </div>
+    );
+  }
 
+  // Check if question has admin answers (multiple choice options)
+  const adminAnswers = question?.answers?.filter(
+    (answer: any) => answer.user.role === "admin"
+  ) || [];
 
+  // If there are admin answers, use the new game interface
+  // Otherwise, fall back to the old form
+  if (adminAnswers.length > 0) {
+    return <GameQuizInterface questionId={params.id} />;
+  }
 
+  // Fallback to old interface
   return (
     <div>
       <BackButton />
       <h1 className="text-2xl my-4 font-bold text-center"> 
-      คำถาม:  {question?.content}  ?
-       </h1>
-      <UserSendForm
-        // submit={handleCreateAnswer}
-        // isEditing={false}
-        questionId= {params.id}
-      />
+        คำถาม: {question?.content}?
+      </h1>
+      {isLoading ? (
+        <p className="text-center">Loading points...</p>
+      ) : (
+        <p className="text-md my-2 text-center text-gray-600">
+          Points for correct answer: {question?.rewardPoints ?? 5} 🥳
+        </p>
+      )}
+      <UserSendForm questionId={params.id} />
     </div>
   );
+  
 }
 
 export default UserCreateAnswerPage;

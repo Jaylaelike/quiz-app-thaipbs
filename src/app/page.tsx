@@ -1,31 +1,6 @@
-import Advertistment from "./components/Advertistment";
-import GreetingCard from "./components/GreetingCard";
-import PostCard from "./components/PostCard";
+import RoleBasedHomePage from "./components/RoleBasedHomePage";
 import db from "./lib/db";
-
 import { auth, currentUser } from "@clerk/nextjs";
-
-async function getPosts() {
-  const res = await db.question.findMany({
-    select: {
-      id: true,
-      content: true,
-      userId: true,
-      createdAt: true,
-      status: true,
-      user: {
-        select: {
-          username: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-  return res;
-}
 
 //create newUser function for create new user
 async function newUser() {
@@ -50,11 +25,7 @@ async function newUser() {
   return res;
 }
 
-// eslint-disable-next-line @next/next/no-async-client-component
 export default async function Home() {
-  const users = await currentUser();
-
-  const post = await getPosts();
   //check if user is not exist in database then create new user
   if (auth().userId) {
     const user = await db.user.findUnique({
@@ -66,25 +37,26 @@ export default async function Home() {
       await newUser();
     }
 
-    return (
-      <>
-        <div className=" w-full  text-white text-center py-1">
-        <div className="carousel rounded-box w-full z-10">
-          <Advertistment />
+    return <RoleBasedHomePage />;
+  }
+
+  // If user is not signed in, show landing page
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-8">
+          🎮 Quiz Game
+        </h1>
+        <p className="text-xl text-gray-600 mb-8">
+          เข้าสู่ระบบเพื่อเริ่มเล่นเกมตอบคำถาม
+        </p>
+        <div className="card w-96 bg-white shadow-xl mx-auto">
+          <div className="card-body">
+            <h2 className="card-title justify-center">กรุณาเข้าสู่ระบบ</h2>
+            <p className="text-gray-600">เข้าสู่ระบบเพื่อเริ่มตอบคำถามและสะสมคะแนน</p>
           </div>
         </div>
-        <main className="grid items-center justify-center md:grid-cols-2 lg:grid-cols-3 gap-4 mt-10">
-          {post.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </main>
-        <div className="flex items-center justify-center h-screen">
-          <GreetingCard
-            username={users?.firstName || users?.username || null}
-            fisrtLogin={user ? false : true}
-          />
-        </div>
-      </>
-    );
-  }
+      </div>
+    </div>
+  );
 }

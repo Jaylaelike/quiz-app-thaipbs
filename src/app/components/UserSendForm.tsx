@@ -147,7 +147,7 @@ const UserSendForm: FC<FormAnswerProps> = ({
   });
   //console.log(dataAnswers);
 
-  const answerIdbyUserId = dataAnswers?.Answers.filter(
+  const answerIdbyUserId = dataAnswers?.answers?.filter(
     (answer) => answer.user.role === "admin"
   );
 
@@ -170,7 +170,7 @@ const UserSendForm: FC<FormAnswerProps> = ({
   // console.log(answerIdbyUserIdChecking?.Answers);
 
   //filter answer by userId
-  const answerIdbyUserIdfilter = answerIdbyUserIdChecking?.Answers.filter(
+  const answerIdbyUserIdfilter = answerIdbyUserIdChecking?.answers?.filter(
     (answer) => answer.userId === userId
   );
 

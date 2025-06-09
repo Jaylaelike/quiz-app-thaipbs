@@ -53,9 +53,12 @@ function NavBar() {
           </h4>
         </div>
         {dataUser?.role === "admin" ? (
-          <div className="flex-none">
+          <div className="flex-none gap-2">
+            <Link href="/admin" className="btn btn-ghost">
+              📊 แดชบอร์ด
+            </Link>
             <Link href="/create" className="btn btn-ghost">
-              สร้างคำถาม
+              ➕ สร้างคำถาม
             </Link>
           </div>
         ) : null}

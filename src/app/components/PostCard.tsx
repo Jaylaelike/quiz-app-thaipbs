@@ -104,21 +104,40 @@ const PostCard: FC<PostCardProps> = ({ post }) => {
       ) : (
         <>
           {status === "production" ? (
-            <div className="card w-full bg-base-100 shadow-xl border">
+            <div className="card w-full bg-gradient-to-br from-blue-50 to-purple-50 shadow-xl border-2 border-primary/20 hover:border-primary/40 transition-all duration-300 hover:shadow-2xl">
               <div className="card-body">
-                <h2 className="card-title">
-                  วันที่ : {dayjs(createdAt).format("DD/MM/YYYY")}
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="badge badge-accent">🎯 คำถาม</div>
+                  <div className="badge badge-outline">
+                    {dayjs(createdAt).format("DD/MM/YYYY")}
+                  </div>
+                </div>
+                <h2 className="card-title text-lg leading-relaxed mb-4">
+                  {content}
                 </h2>
-                <p>{content}</p>
-                <div className="card-actions justify-end">
-                  <span className="badge badge-accent">{status}</span>
-                  <Link href={`/blog/${id}`} className="hover:underline">
-                    Read more...
-                  </Link>
+                <div className="card-actions justify-between items-center">
+                  <div className="flex gap-2">
+                    <span className="badge badge-success">เปิดรับคำตอบ</span>
+                    <span className="badge badge-primary">
+                      🏆 คะแนน: 5
+                    </span>
+                  </div>
+                  <div className="flex gap-2">
+                    <Link 
+                      href={`/usersendanswer/${id}`} 
+                      className="btn btn-primary btn-sm hover:btn-primary-focus"
+                    >
+                      🎮 เล่นเลย!
+                    </Link>
+                    <Link 
+                      href={`/blog/${id}`} 
+                      className="btn btn-ghost btn-sm"
+                    >
+                      ดูรายละเอียด
+                    </Link>
+                  </div>
                 </div>
               </div>
-
-            
             </div>
           ) : null}
         </>

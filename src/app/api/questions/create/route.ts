@@ -8,7 +8,8 @@ export async function POST(req: Request) {
       data: {
         content: body.content,
         status: body.status,
-        userId: body.userId
+        userId: body.userId,
+        rewardPoints: body.rewardPoints || 5
       },
     });
     return NextResponse.json(post, { status: 200 });

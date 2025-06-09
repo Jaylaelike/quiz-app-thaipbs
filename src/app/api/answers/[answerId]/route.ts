@@ -45,6 +45,29 @@ export async function PATCH(req: Request, context: contextProps) {
       },
     });
 
+    // If the answer is marked as correct, update the user's reward points
+    if (body.isCorrect && body.userId) {
+      const pointsToAward = 10; // Define points for a correct answer
+
+      const existingReward = await db.reward.findFirst({
+        where: { userId: body.userId },
+      });
+
+      if (existingReward) {
+        await db.reward.update({
+          where: { id: existingReward.id },
+          data: { points: { increment: pointsToAward } },
+        });
+      } else {
+        await db.reward.create({
+          data: {
+            userId: body.userId,
+            points: pointsToAward,
+          },
+        });
+      }
+    }
+
     return NextResponse.json(
       { message: `update id ${params.answerId} success` },
       { status: 200 }

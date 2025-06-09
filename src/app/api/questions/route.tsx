@@ -2,18 +2,24 @@ import { db } from "../../lib/db";
 import { NextResponse } from "next/server";
 export async function GET() {
   try {
-    const tags = await db.question.findMany({
+    const questions = await db.question.findMany({
       orderBy: {
-        id: "desc",
+        createdAt: "desc",
       },
       include: {
         user: true,
+        answers: {
+          include: {
+            user: true,
+          },
+        },
       },
     });
-    return NextResponse.json(tags, { status: 200 });
-  } catch {
+    return NextResponse.json(questions, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching questions:", error);
     return NextResponse.json(
-      { message: "could not get tags" },
+      { message: "could not get questions" },
       { status: 500 }
     );
   }

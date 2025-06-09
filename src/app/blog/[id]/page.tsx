@@ -34,6 +34,7 @@ async function getPost(id: string) {
       status: true,
       createdAt: true,
       user: true,
+      rewardPoints: true, // Added rewardPoints
     },
   });
   return res;
@@ -105,28 +106,29 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
   const { userId } = auth();
   const user = await currentUser();
 
-  const roleUser = await getRoleUser(userId);
+  let roleUser = null;
+  if (userId) {
+    roleUser = await getRoleUser(userId);
+  }
   // console.log(roleUser);
 
   const post = await getPost(params.id);
 
- const answers = await getAnswers(params.id, userId);
-
-
+  const answers = await getAnswers(params.id); // Corrected: removed userId argument
 
   //filter answer by role of user is "admin"
-
   const filterAnswer = answers.filter((answer) => {
     return answer.user.role === "admin";
   });
   // console.log(filterAnswer);
 
-  //
-
   // console.log(answers);
 
   //check answer have or not  by userId
-  const answerByUserId = await getAnswerByUserId(userId, params.id);
+  let answerByUserId = null;
+  if (userId) {
+    answerByUserId = await getAnswerByUserId(userId, params.id);
+  }
   // console.log(answerByUserId);
 
   const answerAlluser = await getAnswerAlluser(params.id);
@@ -220,7 +222,7 @@ const BlogDetailPage: FC<BlogDetailPageProps> = async ({ params }) => {
             <div className="flex flex-col items-center justify-center w-full space-y-6">
               <h2 className="text-2xl font-bold my-4">{post?.content}</h2>
               <p>โดย: {post?.user?.username}</p>
-              <p>ตอบคำถามถูกรับ 5 คะแนน 🥳</p>
+              <p>ตอบคำถามถูกรับ {post?.rewardPoints ?? 0} คะแนน 🥳</p>
               <p>ตอบคำถามผิดได้ 0 คะแนน 😏</p>
               <ButtonUserAction id={params.id} />
             </div>

@@ -25,9 +25,7 @@ const AnswerFormPost: FC<FormAnswerProps> = ({
     defaultValues: initalValue,
   });
 
-  const [isCorrect, setIsCorrect] = React.useState(false);
-
-  console.log(isCorrect);
+  // Removed redundant isCorrect state as it's managed by react-hook-form
 
   //fetch list page
   // const { data: dataTags, isLoading: isLoadingTags } = useQuery<Tag[]>({
@@ -68,87 +66,32 @@ const AnswerFormPost: FC<FormAnswerProps> = ({
         value={questionId}
       />
 
-      {/* <div className="form-control">
-        <label className="cursor-pointer label">
-          <span className="label-text">ถูก✅</span>
-
-          <Controller
-            name="isCorrect"
-            control={control}
-            render={({ field }) => (
-              <input
-                type="checkbox"
-                {...field}
-                className="checkbox checkbox-success"
-                value={isCorrect === true ? true : false}
-                onChange={(e) => {
-                  setIsCorrect(e.target.checked);
-                  
-                }}
-              />
-            )}
-          />
-        </label>
-      </div>
-      
-      <div className="form-control">
-        <label className="cursor-pointer label">
-          <span className="label-text">ผิด❌</span>
-
-          <Controller
-            name="isCorrect"
-            control={control}
-            render={({ field }) => (
-              <input
-                type="checkbox"
-                {...field}
-                className="checkbox checkbox-error"
-                value={isCorrect === false ? false : true}
-                onChange={(e) => {
-                  setIsCorrect(e.target.checked);
-                  field.onChange(e);
-                }}
-              />
-            )}
-          />
-        </label>
-      </div> */}
 
       <div className="form-control">
         <label className="cursor-pointer label">
           <Controller
             name="isCorrect"
             control={control}
-            render={({ field }) => (
+            defaultValue={false}
+            render={({ field: { value, onChange } }) => (
               <div className="space-x-10">
-                <label>
+                <label className="cursor-pointer label">
                   <input
-                    type="checkbox"
-                    className="checkbox checkbox-success"
-                    {...field}
-                    value={isCorrect}
-                    checked={isCorrect ? true : false}
-                    onChange={(e) => {
-                      setIsCorrect(e.target.checked);
-                      field.onChange(e);
-                    }}
+                    type="radio"
+                    className="radio radio-success"
+                    checked={value === true}
+                    onChange={() => onChange(true)}
                   />
-                  <span className="label-text">ถูก✅</span>
+                  <span className="label-text ml-2">ถูก✅</span>
                 </label>
-
-                <label>
+                <label className="cursor-pointer label">
                   <input
-                    type="checkbox"
-                    {...field}
-                    value={isCorrect}
-                    className="checkbox checkbox-error"
-                    checked={isCorrect ? false : true}
-                    onChange={(e) => {
-                      setIsCorrect(e.target.checked);
-                      field.onChange(e);
-                    }}
+                    type="radio"
+                    className="radio radio-error"
+                    checked={value === false}
+                    onChange={() => onChange(false)}
                   />
-                  <span className="label-text">ผิด❌</span>
+                  <span className="label-text ml-2">ผิด❌</span>
                 </label>
               </div>
             )}
