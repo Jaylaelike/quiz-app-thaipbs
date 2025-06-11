@@ -6,6 +6,7 @@ import axios from "axios";
 import Link from "next/link";
 import dayjs from "dayjs";
 import { QuestionManager, UserProgressManager, GameFlowManager } from "../lib/gameLogic";
+import LoadingSkeleton from "./LoadingSkeleton";
 
 interface User {
   id: string;
@@ -66,14 +67,7 @@ const RoleBasedHomePage = () => {
   });
 
   if (isLoadingUser || isLoadingQuestions) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
-        <div className="text-center">
-          <div className="loading loading-spinner loading-lg mb-4"></div>
-          <p className="text-gray-600">กำลังโหลดข้อมูล...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSkeleton type={isLoadingUser ? "general" : "questions"} />;
   }
 
   if (questionsError) {
@@ -105,26 +99,14 @@ const RoleBasedHomePage = () => {
     return <AdminDashboardView questions={questions || []} />;
   }
 
-  // Use game logic for better user experience
+  // Use simple view for better compatibility
   if (questions && user?.id) {
-    try {
-      const gameSession = GameFlowManager.createGameSession(questions, user.id);
-      
-      return <UserGameView 
-        gameSession={gameSession}
-        userPoints={userPoints}
-        userName={user?.firstName || user?.username || "ผู้เล่น"}
-      />;
-    } catch (error) {
-      console.error("Error creating game session:", error);
-      // Fallback to simple view
-      return <SimpleUserView 
-        questions={questions.filter(q => q.status === 'production')}
-        userPoints={userPoints}
-        userName={user?.firstName || user?.username || "ผู้เล่น"}
-        userId={user.id}
-      />;
-    }
+    return <SimpleUserView 
+      questions={questions.filter(q => q.status === 'production')}
+      userPoints={userPoints}
+      userName={user?.firstName || user?.username || "ผู้เล่น"}
+      userId={user.id}
+    />;
   }
 
   return <div className="min-h-screen flex items-center justify-center">
@@ -246,7 +228,7 @@ const AdminDashboardView: React.FC<{ questions: Question[] }> = ({ questions }) 
           <div className="card-body">
             <h2 className="text-2xl font-bold mb-6">คำถามล่าสุด</h2>
             <div className="space-y-4">
-              {recentQuestions.map((question) => (
+              {recentQuestions.map((question: Question) => (
                 <div key={question.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
                   <div className="flex-1">
                     <h3 className="font-medium text-gray-800 truncate">{question.content}</h3>
@@ -341,7 +323,7 @@ const UserGameView: React.FC<{
               🎯 คำถามใหม่สำหรับคุณ
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {availableQuestions.map((question, index) => (
+              {availableQuestions.map((question: Question, index: number) => (
                 <div key={question.id} className="card bg-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
                   <div className="card-body">
                     <div className="flex items-center gap-2 mb-3">
@@ -453,7 +435,7 @@ const SimpleUserView: React.FC<{
               🎯 คำถามสำหรับคุณ
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {availableQuestions.map((question, index) => (
+              {availableQuestions.map((question: Question, index: number) => (
                 <div key={question.id} className="card bg-white shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
                   <div className="card-body">
                     <div className="flex items-center gap-2 mb-3">
