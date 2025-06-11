@@ -7,6 +7,8 @@ import { authMiddleware } from "@clerk/nextjs";
 
 export default authMiddleware({
   publicRoutes: [
+    "/admin/questions",
+    "/api/admin/reset-rewards",
     "/api/users/create",
     "/api/questions/",
     "/api/questions/create",
