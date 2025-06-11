@@ -1,5 +1,7 @@
 import { db } from "../../../lib/db";
+import { revalidateData } from "../../../lib/revalidation";
 import { NextResponse } from "next/server";
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -10,7 +12,7 @@ export async function POST(req: Request) {
         isCorrect: body.isCorrect,
         questionId: body.questionId,
         userId: body.userId,
-        createdAt : new Date()
+        createdAt: new Date()
       },
     });
 
@@ -27,14 +29,13 @@ export async function POST(req: Request) {
         // Fetch the question to get its point value
         const question = await db.question.findUnique({
           where: { id: body.questionId },
-          select: { rewardPoints: true }, // Changed 'points' to 'rewardPoints'
+          select: { rewardPoints: true },
         });
 
         if (!question) {
           console.error(`Question with ID ${body.questionId} not found. Cannot award points.`);
-          // Decide if you want to return an error or just log and continue
         } else {
-          const pointsToAward = question.rewardPoints ?? 0; // Use rewardPoints from the Question model, default to 0 if null/undefined
+          const pointsToAward = question.rewardPoints ?? 0;
 
           const existingReward = await db.reward.findFirst({
             where: { userId: body.userId },
@@ -59,10 +60,14 @@ export async function POST(req: Request) {
       }
     }
 
+    // Revalidate cache after successful answer creation
+    await revalidateData('/', ['answers', 'questions', 'rewards']);
+
     return NextResponse.json(post, { status: 200 });
   } catch (error) {
+    console.error("Error creating answer:", error);
     return NextResponse.json(
-      { message: "could not get post" },
+      { message: "Could not create answer", error: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

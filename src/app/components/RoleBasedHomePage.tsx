@@ -53,6 +53,8 @@ const RoleBasedHomePage = () => {
       return res.data;
     },
     enabled: !!user?.id,
+    staleTime: 0, // Always fetch fresh data
+    gcTime: 0, // Don't cache data (replaces cacheTime in newer versions)
   });
 
   // Fetch questions
@@ -64,6 +66,8 @@ const RoleBasedHomePage = () => {
     },
     retry: 3,
     retryDelay: 1000,
+    staleTime: 0, // Always fetch fresh data
+    gcTime: 0, // Don't cache data (replaces cacheTime in newer versions)
   });
 
   if (isLoadingUser || isLoadingQuestions) {

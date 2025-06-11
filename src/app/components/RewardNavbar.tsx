@@ -15,6 +15,8 @@ function RewardNavbar({ id }: UserIdProps) {
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
     refetchInterval: 5000,
+    staleTime: 0, // Always fetch fresh data
+    gcTime: 0, // Don't cache data
     queryFn: async () => {
       const res = await axios.get(`/api/users/${id}`);
       console.log(res.data?.Rewards[0].points);

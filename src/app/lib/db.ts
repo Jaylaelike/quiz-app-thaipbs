@@ -1,7 +1,26 @@
 import { PrismaClient } from '@prisma/client'
 
 const prismaClientSingleton = () => {
-  return new PrismaClient()
+  return new PrismaClient({
+    datasources: {
+      db: {
+        url: process.env.DATABASE_URL,
+      },
+    },
+    log: ['error', 'warn'],
+  }).$extends({
+    query: {
+      $allOperations({ operation, model, args, query }) {
+        const start = Date.now();
+        return query(args).finally(() => {
+          const end = Date.now();
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`${model}.${operation} took ${end - start}ms`);
+          }
+        });
+      },
+    },
+  });
 }
 
 declare global {
