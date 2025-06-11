@@ -62,6 +62,8 @@ const UserSendForm: FC<FormAnswerProps> = ({
   const [content, setContent] = React.useState("");
 
   const [onsubmit, setOnsubmit] = React.useState(false);
+  
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   //const [isButtonClicked, setIsButtonClicked] = React.useState(false);
 
@@ -69,27 +71,18 @@ const UserSendForm: FC<FormAnswerProps> = ({
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // console.log(isCorrect);
+    
+    // Prevent multiple submissions
+    if (isSubmitting || onsubmit) return;
+    
+    setIsSubmitting(true);
+    
     createAnswer({
       userId: userId || "",
       questionId: questionId || "",
       content: content,
       isCorrect: isCorrect,
     });
-
-    // if (isCorrect === true) {
-    //   updateReward({
-    //     points: dataReward?.Rewards[0].points + 10,
-    //     userId: userId || "",
-    //   });
-    // }
-
-    // if (isCorrect === false) {
-    //   updateReward({
-    //     points: dataReward?.Rewards[0].points + 5,
-    //     userId: userId || "",
-    //   });
-    // }
   };
 
   const router = useRouter();
@@ -101,12 +94,19 @@ const UserSendForm: FC<FormAnswerProps> = ({
     },
     onError: (error) => {
       console.log(error);
+      setIsSubmitting(false); // Reset on error to allow retry
     },
     onSuccess: (data) => {
-      //  console.log(data);
+      setOnsubmit(true);
+      // Award points if correct
+      if (isCorrect === true) {
+        updateReward({
+          points: dataReward?.Rewards[0].points + 5,
+          userId: userId || "",
+        });
+      }
       router.push("/");
       router.refresh();
-      setOnsubmit(true);
     },
   });
 
@@ -347,23 +347,18 @@ const UserSendForm: FC<FormAnswerProps> = ({
               isLoadingReward ||
               onsubmit ||
               createAnswerLoading ||
+              isSubmitting ||
               answerIdbyUserIdfilterNew?.length > 0
             }
-            onClick={async () => {
-              //setIsButtonClicked(true);
-              router.push("/");
-
-              if (isCorrect === true) {
-                await updateReward({
-                  points: dataReward?.Rewards[0].points + 5,
-                  userId: userId || "",
-                });
-              }
-
-          
-            }}
           >
-            ส่งคำตอบ
+            {createAnswerLoading || isSubmitting ? (
+              <>
+                <span className="loading loading-spinner loading-sm"></span>
+                กำลังส่ง...
+              </>
+            ) : (
+              "ส่งคำตอบ"
+            )}
           </button>
         )}
       </form>

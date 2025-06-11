@@ -6,6 +6,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import JSConfetti from "js-confetti";
+import { useDebounce } from "../lib/useDebounce";
 
 interface GameQuizInterfaceProps {
   questionId: string;
@@ -19,6 +20,7 @@ const GameQuizInterface: React.FC<GameQuizInterfaceProps> = ({ questionId }) => 
   const [timeLeft, setTimeLeft] = useState(30); // 30 seconds timer
   const [isTimeUp, setIsTimeUp] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Timer countdown
   useEffect(() => {
@@ -69,6 +71,10 @@ const GameQuizInterface: React.FC<GameQuizInterfaceProps> = ({ questionId }) => 
         router.refresh();
       }, 3000);
     },
+    onError: () => {
+      // Reset submitting state on error to allow retry
+      setIsSubmitting(false);
+    },
   });
 
   // Update reward mutation
@@ -94,8 +100,11 @@ const GameQuizInterface: React.FC<GameQuizInterfaceProps> = ({ questionId }) => 
     }
   };
 
-  const handleSubmit = () => {
-    if (!selectedAnswer || isSubmitted || isTimeUp) return;
+  const handleSubmitInternal = () => {
+    if (!selectedAnswer || isSubmitted || isTimeUp || isSubmitting) return;
+
+    // Immediately set submitting state to prevent multiple clicks
+    setIsSubmitting(true);
 
     const selectedAnswerData = adminAnswers.find(
       (answer: any) => answer.id === selectedAnswer
@@ -132,6 +141,9 @@ const GameQuizInterface: React.FC<GameQuizInterfaceProps> = ({ questionId }) => 
       }
     }
   };
+
+  // Debounced submit handler to prevent rapid clicking
+  const handleSubmit = useDebounce(handleSubmitInternal, 300);
 
   // Show loading state
   if (isLoadingQuestion) {
@@ -327,9 +339,9 @@ const GameQuizInterface: React.FC<GameQuizInterfaceProps> = ({ questionId }) => 
             <button
               className="btn btn-primary btn-lg w-full text-xl py-4"
               onClick={handleSubmit}
-              disabled={!selectedAnswer || isSubmitted || isTimeUp || createAnswerLoading}
+              disabled={!selectedAnswer || isSubmitted || isTimeUp || createAnswerLoading || isSubmitting}
             >
-              {createAnswerLoading ? (
+              {createAnswerLoading || isSubmitting ? (
                 <>
                   <span className="loading loading-spinner loading-md"></span>
                   กำลังส่ง...
