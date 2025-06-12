@@ -1,0 +1,14 @@
+{
+  "env": {
+    "DATABASE_URL": "postgresql://neondb_owner:npg_LNwMKJl7hcu6@ep-mute-glitter-a168195g-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require",
+    "DIRECT_URL": "postgresql://neondb_owner:npg_LNwMKJl7hcu6@ep-mute-glitter-a168195g.ap-southeast-1.aws.neon.tech/neondb?sslmode=require",
+    "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_ZXhhY3Qtc3RvcmstNTMuY2xlcmsuYWNjb3VudHMuZGV2JA",
+    "CLERK_SECRET_KEY": "sk_test_17Jqf15iFBxNbiys5dzIeHBsIKn0LXZZj1yBgsZh1x",
+    "SENTRY_AUTH_TOKEN": "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"
+  },
+  "build": {
+    "env": {
+      "DATABASE_URL": "postgresql://neondb_owner:npg_LNwMKJl7hcu6@ep-mute-glitter-a168195g-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require"
+    }
+  }
+}
